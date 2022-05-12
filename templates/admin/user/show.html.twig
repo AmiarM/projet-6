@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+{% block stylesheet %}
+    <link type="text/css" rel="stylesheet" href="{{asset('css/show.css')}}">
+{% endblock %}
+{% block admin %}
+<div class="padding">
+    <div class="col-md-12">
+        <a href="{{path('admin_users')}}" class="btn btn-primary"><i class="fa fa-list" aria-hidden="true"></i>
+            USERS LISTS
+        </a>
+    </div>
+    <div class="col-md-8">
+        <!-- Column -->
+        <div class="card"> <img class="card-img-top" src="{{asset('images/show.jpg')}}" alt="Card image cap">
+            <div class="card-body little-profile text-center">
+                <div class="pro-img"><img src="{{asset('/uploads/'~user.avatar)}}" alt="user"></div>
+                <h3 class="m-b-0">{{user.firstname|upper}}  {{user.lastname|upper}}</h3>
+                <p>Inscrit le: {{user.createdAt|date('d/m/y à H:i:s')}}</p> <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">
+                    {% for role in user.roles %}
+                        {%if role == 'ROLE_USER'%}
+                            USER
+                        {% else %}
+                            ADMIN
+                        {% endif %}
+                    {% endfor %}
+                </a>
+                <div class="row text-center m-t-20">
+                    <div class="col-lg-4 col-md-4 m-t-20">
+                        <h3 class="m-b-0 font-light">ID</h3><small>{{user.id}}</small>
+                    </div>
+                    <div class="col-lg-4 col-md-4 m-t-20">
+                        <h3 class="m-b-0 font-light">EMAIL</h3><small>{{user.email}}</small>
+                    </div>
+                    <div class="col-lg-4 col-md-4 m-t-20">
+                        <h3 class="m-b-0 font-light">STATUT</h3>
+                        {% if user.activated == 0 %}
+                            <small>INACTIVE</small>
+                        {% else %}
+                           <small>ACTIVE</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,270 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<!-- Header -->
+	<header class="masthead" style="height: 50vh;background: url({{asset('images/gal10.jpg')}});background-repeat: no-repeat;background-size: cover;">
+		<div class="container d-flex h-100 align-items-center">
+			<div class="mx-auto text-center">
+				<h1 class="text-uppercase mx-auto my-0">Born To Snowboard</h1>
+			</div>
+		</div>
+	</header>
+	<!-- Trick Section -->
+	<!-- Carousel wrapper -->
+	<div id="carouselMultiItemExample" class="carousel slide carousel-dark text-center" data-mdb-ride="carousel">
+		<!-- Inner -->
+		<div class="carousel-inner py-4">
+		<!-- Single item -->
+			<div class="carousel-item active">
+				<div class="container">
+					<div class="row">
+            <div class="col-md-12">
+              <h3 style="float:left;">Catégorie: {{trick.categorie.name}}</h3>
+            </div>
+            
+            {% for image in trick.images %}
+						<div class="col-lg-2">
+							<div class="card">
+                                <img src="{{asset('/uploads/' ~ image.name)}}" alt="Waterfall"/>
+								<div class="card-body">
+									
+                                    <div class="btn-toolbar">
+                                        <div class="btn-group">
+                                            <a class="btn btn-danger" href="#"><i class='fa fa-trash'></i></a>
+                                            <a class="btn btn-success" href="#"><i class='fa fa-edit'></i></a>
+                                        </div>
+                                    </div>
+								</div>
+							</div>
+						</div>
+            {% endfor %}
+            {% for image in trick.images %}
+						<div class="col-lg-2">
+							<div class="card">
+                                <img src="{{asset('/uploads/' ~ image.name)}}" alt="Waterfall"/>
+								<div class="card-body">
+									
+                                    <div class="btn-toolbar">
+                                        <div class="btn-group">
+                                            <a class="btn btn-danger" href="#"><i class='fa fa-trash'></i></a>
+                                            <a class="btn btn-success" href="#"><i class='fa fa-edit'></i></a>
+                                        </div>
+                                    </div>
+								</div>
+							</div>
+						</div>
+            {% endfor %}
+          
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <h3 style="float:left;"> Description du Trick</h3>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">{{trick.description}}</textarea>
+            </div>
+          </div>
+         </div>
+      </div>
+    </div>
+
+    <!-- Single item -->
+    <div class="carousel-item">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-12">
+            <div class="card">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"
+                class="card-img-top"
+                alt="Fissure in Sandstone"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up the bulk
+                  of the card's content.
+                </p>
+                <a href="#!" class="btn btn-primary">Button</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 d-none d-lg-block">
+            <div class="card">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/new/standard/nature/185.webp"
+                class="card-img-top"
+                alt="Storm Clouds"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up the bulk
+                  of the card's content.
+                </p>
+                <a href="#!" class="btn btn-primary">Button</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 d-none d-lg-block">
+            <div class="card">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/new/standard/nature/186.webp"
+                class="card-img-top"
+                alt="Hot Air Balloons"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up the bulk
+                  of the card's content.
+                </p>
+                <a href="#!" class="btn btn-primary">Button</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Single item -->
+    <div class="carousel-item">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+            <div class="card">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/new/standard/nature/187.webp"
+                class="card-img-top"
+                alt="Peaks Against the Starry Sky"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up the bulk
+                  of the card's content.
+                </p>
+                <a href="#!" class="btn btn-primary">Button</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mb-4 mb-lg-0 d-none d-lg-block">
+            <div class="card">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/new/standard/nature/188.webp"
+                class="card-img-top"
+                alt="Bridge Over Water"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up the bulk
+                  of the card's content.
+                </p>
+                <a href="#!" class="btn btn-primary">Button</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mb-4 mb-lg-0 d-none d-lg-block">
+            <div class="card">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/new/standard/nature/189.webp"
+                class="card-img-top"
+                alt="Purbeck Heritage Coast"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                  Some quick example text to build on the card title and make up the bulk
+                  of the card's content.
+                </p>
+                <a href="#!" class="btn btn-primary">Button</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Inner -->
+</div>
+<!-- Carousel wrapper -->
+<!-- Comments Section -->
+<section id="comments">
+	<div class="container commentaires">
+		<div class="row justify-content-md-center">
+      {% if app.user  is not defined%}
+      <div class="col-md-6 col-lg-12">
+				<div id="post-add-comment" class="well">
+                     <div class="form-card text-center">
+						<a class="btn btn-success btnlogin2" href="{{path('user_login')}}">
+							<i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Connectez-vous
+						</a>
+						pour publier un message<br>
+					</div>
+				</div>
+			</div>
+      {% endif %}
+			<div class="col-sm-8 commentaires2">
+				<h3>
+				<i class="fa fa-comments" aria-hidden="true"></i> {{trick.comments | length}}
+					commentaire</h3>
+				<hr>
+        {% if trick.comments | length == 0%}
+        <div class="post-comment">
+					<p>Il n'y a aucun commentaire pour l'instant.</p>
+				</div>
+        {% else %}
+        {% for comment in trick.comments %}
+        {% if comment.activated == 1%}
+												<div class="d-flex flex-start mt-4" style="margin-left:90px;">
+													<a class="me-3" href="#">
+														<img class="rounded-circle shadow-1-strong" src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp" alt="avatar" width="65" height="65"/>
+													</a>
+													<div class="flex-grow-1 flex-shrink-1">
+														<div>
+															<div class="d-flex justify-content-between align-items-center">
+																<p class="mb-1">
+																	{{app.user.firstname}} {{app.user.lastname}}
+																	<span class="small">- {{comment.createdAt|date('y/m/d H:i:s')}}</span>
+																</p>
+															</div>
+															<p class="small mb-0">
+																{{comment.content}}
+															</p>
+                              </p>
+														</div>
+													</div>
+												</div>
+                        {% endif %}
+											{% endfor %}
+        {%endif%}
+        <br>
+        <hr>
+        <div class="form-comments" id="reply">
+          <div class="title-box-2">
+            <h3 class="title-left">
+              Leave a Comment
+            </h3>
+          </div>
+          {{form_start(form)}}
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <div class="form-group">
+                  {{form_row(form.content)}}
+                </div>
+              </div>
+              <div class="col-md-12">
+                {{form_row(form.submit)}}
+              </div>
+            </div>
+            {{form_end(form)}}
+        </div>
+			</div>
+		</div>
+	</div>
+</section> 
+{% endblock %}

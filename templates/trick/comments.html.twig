@@ -1,0 +1,52 @@
+{% extends 'layout.html.twig' %}
+
+{% block admin %}
+{% if trick.comments | length == 0 %}
+<div class="row d-flex justify-content-center mt-100 mb-100">
+  <div class="col-lg-6">
+    <div class="card-body text-center">
+      <h4 class="card-title" style="font-weight:bold;">{{trick.name|upper}}</h4>
+  </div>
+<div class="alert alert-danger text-center">
+  Aucun commentaire pour ce trick
+</div>
+{% else %}
+<div class="row d-flex justify-content-center mt-100 mb-100">
+  <div class="col-lg-6">
+    <div class="card-body text-center">
+      <h4 class="card-title" style="font-weight:bold;">{{trick.name|upper}}</h4>
+  </div>
+      <div class="card">
+          {% for comment in paginations%}
+          <div class="comment-widgets">
+              <!-- Comment Row -->
+              <div class="d-flex flex-row comment-row mt-3">
+                  <div class="p-2"><img src="{{asset('/uploads/'~comment.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                  <div class="comment-text w-100 mb-3">
+                      <h6 class="font-medium" style="font-weight:bold;">{{comment.user.firstname|upper}} {{comment.user.lastname|upper}}</h6> 
+                      <p>
+                        {% if comment.activated == 0 %} 
+                        <span class="badge badge-danger" style="float:left;">Inactive</span> 
+                        {% else %}
+                        <span class="badge badge-success" style="float:left;">Active</span>
+                        {% endif %}
+                      </p>
+                      <br>
+                      <hr>
+                      <span class="m-b-15 d-block">{{comment.content}}. </span>
+                      <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">published at: {{comment.createdAt|date('d/m/y à H:i:s')}}
+                      </span>  
+                      <a type="button" href="{{path('app_comment_activated',{'id':comment.id})}}" class="btn btn-success btn-sm">Publish</a>
+                       <a type="button" href="{{path('app_comment_delete',{'id':comment.id})}}" class="btn btn-danger btn-sm">Delete</a> </div>
+                  </div>
+              </div> <!-- Comment Row -->
+          </div> <!-- Card -->
+          {% endfor %}
+      </div>
+      <div class="navigation">
+        {{ knp_pagination_render(paginations) }}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock admin %}

@@ -1,0 +1,65 @@
+<header id="header" class="pt-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <ul id="nav_brand" class="desktop">
+                        <li>
+                            <a href="https://www.flow-bindings.com">
+                                <img alt="Flow's logo" class="logo_brand" src="{{ asset("images/1.jpg") }}">
+                            </a>
+                        </li>
+                    </ul>                   
+                </div>
+
+                <div class="text-sm-center col-md-6 position-static">
+
+                    <div class="menu js-top-menu position-static hidden-sm-down" id="_desktop_top_menu">
+
+                        <ul class="top-menu d-inline" id="top-menu" data-depth="0">
+                            <li class="category current" id="category-19">
+                                <a class="dropdown-item" href="{{path('homepage')}}" data-depth="0">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="category" id="category-28">
+                                <a class="dropdown-item" href="" data-depth="0">
+                                    Contact
+                                </a>
+                            </li>
+                            <li class="hidden-sm-down">
+                                <a href="">
+                                    <img class="mainmenu-logo-picto" src="{{ asset('images/1.jpg') }}" alt="Nidecker SA" aria-label="Nidecker SA">
+                                </a>
+                            </li>
+                            {% if app.user %}
+
+                                <li class="category" id="category-28">
+                                    <a class="dropdown-item" href="{{path('user_logout')}}" data-depth="0">
+                                        Logout
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{path('user_account')}}"  data-depth="0">
+                                        Espace Membre
+                                    </a>
+                                </li>
+                            {% else %} 
+                                <li class="category" id="category-28">
+                                    <a class="dropdown-item" href="{{path('user_register')}}" data-depth="0">
+                                        Register
+                                    </a>
+                                </li>
+                                <li class="category" id="category-28">
+                                    <a class="dropdown-item" href="{{path('user_login')}}" data-depth="0">
+                                        Login
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+</header>
