@@ -62,8 +62,7 @@ class RegisterController extends AbstractController
                 "confirmer votre inscription",
                 "/login"
             );
-
-            $this->addFlash('message', 'Message envoyé avec succès');
+            $this->addFlash('success', 'Message envoyé avec succès');
             return $this->redirectToRoute('app_user_login');
         }
         return $this->render('register/index.html.twig', [

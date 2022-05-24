@@ -12,24 +12,24 @@
 <div class="container mt-5" >
     <div class="row justify-content-center">
        <div class="col-lg-4 col-md-10">
-        <h1>Inscription:</h1>
-        <p>Veuillez entrer vos coordonnées ci-dessous.</p>
-       {{ form_start(form) }}
-                                    <div class="form-group">
-                                        {{ form_row(form.firstname) }}
-                                    </div>
-                                    <div class="form-group">
-                                        {{ form_row(form.lastname) }}
-                                    </div>
-                                    <div class="form-group">
-                                        {{ form_row(form.email) }}
-                                    </div>
-                                    <div class="form-group">
-                                        {{ form_row(form.password) }}
-                                    </div>
-                                    {{ form_end(form) }}
+            <h1>Inscription:</h1>
+            <p>Veuillez entrer vos coordonnées ci-dessous.</p>
+             {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_row(form.firstname) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.lastname) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.email) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.password) }}
+                </div>
+            {{ form_end(form) }}
        </div>
     </div>
 </div>
 <br><br><br>
-    {% endblock %}
+{% endblock %}
