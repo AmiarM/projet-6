@@ -37,6 +37,7 @@ class AccountController extends AbstractController
      */
     public function changePassword(Request $request, UserPasswordHasherInterface $encoder)
     {
+        //changement du mot de passe
         $user = $this->getUser();
         $form = $this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
