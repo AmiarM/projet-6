@@ -36,10 +36,9 @@
                                     <tr>
                                         <th><a href="#"><span>ID</span></a></th>
                                         <th><a href="#" class="desc"><span>NAME</span></a></th>
-                                        <th><a href="#" class="desc"><span>DESCRIPTION</span></a></th>
                                         <th><a href="#" class="desc"><span>SLUG</span></a></th>
                                         <th><a href="#" class="desc"><span>CREATEDAT</span></a></th>
-										<th><a href="#" class="desc"><span>UPDATEDAT</span></a></th>
+                                        <th><a href="#" class="desc"><span>UPDATEDAT</span></a></th>
                                         <th><a href="#" class="desc"><span>ACTIVE</span></a></th>
                                         <th><a href="#" class="desc"><span>Actions</span></a></th>
                                     </tr>
@@ -48,21 +47,18 @@
                                     {% for trick in paginations %}
                                         <tr>
                                             <td>
-												{{ trick.id }}
+                                                {{ trick.id }}
                                             </td>
                                             <td>
                                                 {{ trick.name }}
                                             </td>
                                             <td>
-                                                {{ trick.description }}
-                                            </td>
-                                            <td>
                                                 {{ trick.slug }}
                                             </td>
-											  <td>
+                                              <td>
                                                 {{ trick.createdAt|date('d/m/y') }}
                                             </td>
-											  <td>
+                                              <td>
                                                 {{ trick.updatedAt|date('d/m/y') }}
                                             </td>
                                                 <td>
@@ -94,15 +90,21 @@
                                                         <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
                                                     </span>
                                                 </a>
+                                                <a href="{{path('app_trick_edit',{'id':trick.id})}}" class="table-link success">
+                                                    <span class="fa-stack">
+                                                        <i class="fa fa-square fa-stack-2x"></i>
+                                                        <i class="fa fa-edit fa-stack-1x fa-inverse"></i>
+                                                    </span>
+                                                </a>
                                             </td>
                                         </tr>
-									{%else%}
-									    <tr>
-											<td colspan="7">
-												<div class="alert alert-danger">
-													no records found
-												</div>
-											</td>
+                                    {%else%}
+                                        <tr>
+                                            <td colspan="7">
+                                                <div class="alert alert-danger">
+                                                    no records found
+                                                </div>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -117,3 +119,4 @@
         </div>
     </div>
 {% endblock %}
+

@@ -3,19 +3,18 @@
 {% block title %}Register{% endblock %}
 {% block stylesheet %}
     
-<link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
-<link rel="stylesheet" href="{{ asset('css/register.css') }}">
+
 {% endblock %}
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="main">
-                <section class="signup">
-                    <div class="container">
-                        <div class="signup-content">
-                            <div class="signup-form" style="margin:0 auto;">
-                                <h2 class="form-title">Inscription:</h2>
-                                {{ form_start(form) }}
+<br>
+<br>
+<br>
+<div class="container mt-5" >
+    <div class="row justify-content-center">
+       <div class="col-lg-4 col-md-10">
+        <h1>Inscription:</h1>
+        <p>Veuillez entrer vos coordonnées ci-dessous.</p>
+       {{ form_start(form) }}
                                     <div class="form-group">
                                         {{ form_row(form.firstname) }}
                                     </div>
@@ -29,10 +28,8 @@
                                         {{ form_row(form.password) }}
                                     </div>
                                     {{ form_end(form) }}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+       </div>
+    </div>
+</div>
+<br><br><br>
     {% endblock %}

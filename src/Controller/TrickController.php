@@ -4,15 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Image;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Func;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/trick")
@@ -27,7 +30,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/", name="app_trick_index", methods={"GET"})
+     * @Route("/admin/tricks", name="app_trick_index", methods={"GET"})
      */
     public function index(TrickRepository $trickRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -43,12 +46,12 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_trick_new")
+     * @Route("/new", name="app_trick_new",methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
-        $trick = new Trick();
         $user = $this->getUser();
+        $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
@@ -72,12 +75,13 @@ class TrickController extends AbstractController
             $trick->setUser($user);
             $this->entityManagerInterface->persist($trick);
             $this->entityManagerInterface->flush();
-            return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Trick successfully added!');
+            return $this->redirectToRoute('app_trick_index');
         }
 
-        return $this->render('trick/new.html.twig', [
+        return $this->renderForm('trick/new.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView(),
+            'form' => $form,
             'action' => 'New Trick'
         ]);
     }
@@ -85,10 +89,17 @@ class TrickController extends AbstractController
     /**
      * @Route("/{id}", name="app_trick_show", methods={"GET"})
      */
-    public function show(Trick $trick): Response
+    public function show(Trick $trick, PaginatorInterface $paginator, TrickRepository $trickRepository, Request $request): Response
     {
+        $comments = $trick->getComments();
+        $paginations = $paginator->paginate(
+            $comments, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            10 /* limit per page */
+        );
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'paginations' => $paginations
         ]);
     }
 
@@ -130,37 +141,29 @@ class TrickController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="app_trick_delete", methods={"POST"})
-     */
-    public function delete(Request $request, Trick $trick, TrickRepository $trickRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
-            $trickRepository->remove($trick);
-        }
-
-        return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
-    }
 
     /**
      * @Route("/image/{id}", name="app_trick_image_delete", methods={"DELETE"})
      */
-    public function deleteImage(Image $image, Request $request, EntityManagerInterface $entityManagerInterface)
+    public function deleteImage(Image $image, Request $request, EntityManagerInterface $em)
     {
         $data = json_decode($request->getContent(), true);
-        //on verifie si le token est valide
-        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['token'])) {
-            //on récupere le nom de l'image
-            $name = $image->getName();
-            //on supprime l'image
-            unlink($this->getParameter('images_directory') . '/' . $name);
-            //on supprime l'entrée de la base
-            $entityManagerInterface->remove($image);
-            $entityManagerInterface->flush();
-            //on répond en json
+
+        // On vérifie si le token est valide
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
+            // On récupère le nom de l'image
+            $nom = $image->getName();
+            // On supprime le fichier
+            unlink($this->getParameter('images_directory') . '/' . $nom);
+
+            // On supprime l'entrée de la base
+            $em->remove($image);
+            $em->flush();
+
+            // On répond en json
             return new JsonResponse(['success' => 1]);
         } else {
-            return new JsonResponse(['Error' => 'Token Invalide'], 400);
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
         }
     }
 
@@ -174,11 +177,77 @@ class TrickController extends AbstractController
         $paginations = $paginator->paginate(
             $comments, /* query NOT result */
             $request->query->getInt('page', 1), /* page number */
-            1 /* limit per page */
+            10 /* limit per page */
         );
         return $this->render('trick/comments.html.twig', [
             'trick' => $trick,
             'paginations' => $paginations
         ]);
+    }
+
+    /**
+     * @Route("/{id}/activate", name="app_trick_activated", methods={"GET"})
+     */
+    public function activated(Trick $trick)
+    {
+        if (!$trick) {
+            throw new NotFoundHttpException('Trick not Found');
+        }
+        $trick->setActivated(1);
+        $this->entityManagerInterface->flush();
+        return $this->redirectToRoute('app_trick_index');
+    }
+
+    /**
+     * @Route("/video/delete/{id}", name="app_video_delete", methods={"DELETE"})
+     */
+    public function deleteVideo(Request $request, Video $video, EntityManagerInterface $em): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('delete' . $video->getId(), $data['_token'])) {
+            $em->remove($video);
+            $em->flush();
+
+            // On répond en json
+            return new JsonResponse(['success' => 1]);
+        } else {
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
+        }
+    }
+
+
+
+    /**
+     * @Route("/{id}", name="app_trick_delete", methods={"POST"})
+     */
+    public function delete(Request $request, Trick $trick, TrickRepository $trickRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
+            $trickRepository->remove($trick);
+        }
+
+        return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/image/promote/{id}", name="app_trick_image_promote", methods={"GET"})
+     */
+    public function promote(Image $image, EntityManagerInterface $em)
+    {
+        if (!$image) {
+            throw new NotFoundHttpException('Image Not Foud');
+        }
+        $image->setIsFirst(1);
+        $em->flush();
+    }
+
+    /**
+     * @Route("/personal/tricks",name="app_tricks_lists")
+     *
+     * @return void
+     */
+    public function tricks()
+    {
+        return $this->render('trick/mytricks.html.twig');
     }
 }

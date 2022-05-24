@@ -2,9 +2,14 @@
 
 {% block title %}Edit Trick{% endblock %}
 
+
 {% block admin %}
     <h1>Edit Trick</h1>
 
-    {{ include('trick/_form.html.twig') }}
-    
+    {{ include('trick/_form.html.twig', {'button_label': 'Update'}) }}
+
+{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('js/images.js') }}"></script>
+    <script src="{{ asset('js/delete.js') }}"></script>
 {% endblock %}

@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Image;
+use App\Service\Mailer;
 use App\Form\RegisterType;
-use PHPMailer\PHPMailer\SMTP;
-use Symfony\Component\Mime\Email;
-use PHPMailer\PHPMailer\Exception;
+use App\Repository\UserRepository;
+use PHPMailer\PHPMailer\PHPMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -19,13 +19,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 
+
 class RegisterController extends AbstractController
 {
 
     /**
-     * @Route("/register", name="user_register")
+     * @Route("/register", name="app_user_register")
      */
-    public function index(MailerInterface $mailer, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function index(Mailer $mailer, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
@@ -33,7 +34,7 @@ class RegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $password = $user->getPassword();
-            $user->setToken(md5(random_bytes(10)));
+            $user->setToken(md5(uniqid(10)));
             $user->setPassword($userPasswordHasher->hashPassword($user, $password));
             //on récupére les images transmises
             $image = $form->get('avatar')->getData();
@@ -53,15 +54,17 @@ class RegisterController extends AbstractController
             $this->addFlash('success', 'User Created!');
             //dd($user->getEmail());
             //envoi de mail
-            $email = (new Email())
-                ->from('mohamed.amiar@gmail.com')
-                ->to($user->getEmail())
-                ->subject('Valider votre Inscription')
-                ->text('pour valider votre compte veuillez utiliser l\'url suivante:')
-                ->html('https://127.0.0.1:8000/register/confirm/' . $user->getId() . "/" . $user->getToken());
-            $mailer->send($email);
+            $mailer->sendMail(
+                $user->getEmail(),
+                "valider votre inscription",
+                "pour valider votre compte veuillez utiliser l'url suivante:<br>
+                http://localhost:8000/register/confirm/" . $user->getToken(),
+                "confirmer votre inscription",
+                "/login"
+            );
+
             $this->addFlash('message', 'Message envoyé avec succès');
-            return $this->redirectToRoute('user_login');
+            return $this->redirectToRoute('app_user_login');
         }
         return $this->render('register/index.html.twig', [
             'form' => $form->createView()
@@ -70,16 +73,48 @@ class RegisterController extends AbstractController
 
 
     /**
-     * @Route("/register/confirm/{id}/{token}", name="user_register_confirm")
+     * @Route("/register/confirm/{token}", name="user_register_confirm")
      */
-    public function confirm(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function confirm($token, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
-        $user = $this->getUser();
+        //on verifie si un utilisateur à ce token
+        $user = $userRepository->findOneBy(['token' => $token]);
         if (!$user) {
             throw new NotFoundHttpException('User Innéxistant');
         }
+        //on supprime le token 
+        $user->setToken('null');
         $user->setActivated(1);
-        $this->entityManager->flush();
-        return $this->redirectToRoute('user_login');
+        $em->persist($user);
+        $em->flush();
+        //on envoie un message flash
+        $this->addFlash('success', 'user actiavated');
+        return $this->redirectToRoute('app_user_login');
+    }
+
+    /*************************************************************** */
+    public function sendMail($destinataire, $subject, $messages, $altBody, $redirect)
+    {
+        //------smtp settings
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = "localhost";
+        $mail->Port = 1025;
+        $mail->SMTPAutoTLS = false;
+        //------email settings
+        $mail->isHTML(true);
+        $mail->SetFrom("mohamed.amiar@gmail.com", "amiar");
+        $mail->AddAddress($destinataire);
+        $mail->Subject  = $subject;
+        $mail->Body     = $messages;
+        $mail->AltBody = $altBody;
+
+        if (!$mail->Send()) {
+            echo 'Message was not sent.';
+            echo 'Mailer error: ' . $mail->ErrorInfo;
+        } else {
+            echo 'Message has been sent.';
+            $this->redirect($redirect);
+        }
     }
 }

@@ -44,13 +44,8 @@
                         Manage Website
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="item">
-                            <a href="{{path('admin_user_add')}}">
-                                <i class="fa fa-users">
-                                </i>
-                                New User
-                            </a>
-                        </li>
+                    {% for role in app.user.roles %}
+                        {% if role == 'ROLE_ADMIN' %}
                         <li class="item">
                             <a href="{{path('admin_categorie_add')}}">
                                 <i class="fa fa-sitemap">
@@ -58,6 +53,8 @@
                                 New Categorie
                             </a>
                         </li>
+                        {% endif %}
+                    {% endfor %}
                         <li class="item">
                             <a href="{{path('app_trick_new')}}">
                                 <i class="fa fa-snowboarding">
@@ -104,21 +101,21 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li>
-                            <a href="{{path('user_account')}}">
+                            <a href="{{path('app_user_account')}}">
                                 <i class="fa fa-user">
                                 </i>
                                 Profile
                             </a>
                         </li>
                         <li>
-                            <a href="{{path('user_change_password')}}">
+                            <a href="{{path('app_user_change_password')}}">
                                 <i class="fa fa-key">
                                 </i>
                                 Change Password
                             </a>
                         </li>
                         <li>
-                            <a href="{{path('user_logout')}}">
+                            <a href="{{path('app_user_logout')}}">
                                 <i class="fa fa-power-off">
                                 </i>
                                 Logout
@@ -127,7 +124,7 @@
                     </ul>
                 </li>
                 <li class="d-none d-sm-block">
-                    <a class="btn" href="{{path('user_logout')}}">
+                    <a class="btn" href="{{path('app_user_logout')}}">
                         <i class="fa fa-power-off">
                         </i>
                     </a>
@@ -162,12 +159,16 @@
                                         <li class="nav-header nav-header-first d-none d-lg-block">
                                             Navigation
                                         </li>
+                                        {% for role in app.user.roles %}
+                                        {% if role == 'ROLE_ADMIN' %}
                                         <li class="active">
                                             <a href="{{path('app_admin')}}">
                                                 <i class="fa fa-dashboard"></i>
                                                 <span>Dashboard</span>
                                             </a>
                                         </li>
+                                        {% endif %}
+                                        {% endfor %}
                                         <li>
                                             <a href="#" class="dropdown-toggle dropdown-nocaret">
                                                 <i class="fa fa-snowboarding"></i>
@@ -181,14 +182,26 @@
                                                         <span class="badge badge-success float-right">New</span>
                                                     </a>
                                                 </li>
+                                                {% for role in app.user.roles %}
+                                                    {% if role == 'ROLE_ADMIN' %}
                                                 <li>
                                                     <a href="{{path('app_trick_index')}}">
                                                         Tricks Lists
                                                         <span class="badge badge-success float-right">Lists</span>
                                                     </a>
                                                 </li>
+                                                  {% endif %}
+                                                {% endfor %}
+                                                <li>
+                                                    <a href="{{path('app_tricks_lists')}}">
+                                                        My Tricks 
+                                                        <span class="badge badge-success float-right">Lists</span>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </li>
+                                        {% for role in app.user.roles %}
+                                        {% if role == 'ROLE_ADMIN' %}
                                         <li>
                                             <a href="#" class="dropdown-toggle dropdown-nocaret">
                                                 <i class="fa fa-tag"></i>
@@ -210,6 +223,8 @@
                                                 </li>
                                             </ul>
                                         </li>
+                                        {% endif %}
+                                        {% endfor %}
                                         <li>
                                             <a href="#" class="dropdown-toggle dropdown-nocaret">
                                                 <i class="fa fa-envelope"></i>
@@ -223,9 +238,19 @@
                                                         <span class="badge badge-success float-right">New</span>
                                                     </a>
                                                 </li>
+                                                {% for role in app.user.roles %}
+                                                {% if role == 'ROLE_ADMIN' %}
                                                 <li>
                                                     <a href="{{path('app_comment_index')}}">
                                                         Comments Lists
+                                                        <span class="badge badge-success float-right">Lists</span>
+                                                    </a>
+                                                </li>
+                                                {% endif%}
+                                                {%endfor%}
+                                                <li>
+                                                    <a href="{{path('app_comment_lists')}}">
+                                                        My Comments
                                                         <span class="badge badge-success float-right">Lists</span>
                                                     </a>
                                                 </li>
@@ -238,20 +263,18 @@
                                                 <i class="fa fa-angle-right drop-icon"></i>
                                             </a>
                                             <ul class="submenu">
+                                                {% for role in app.user.roles %}
+                                                    {% if role == 'ROLE_ADMIN' %}
+                                                    <li>
+                                                        <a href="{{path('admin_users')}}">
+                                                            Users Lists
+                                                            <span class="badge badge-success float-right">Lists</span>
+                                                        </a>
+                                                    </li> 
+                                                    {% endif %}
+                                                {% endfor %}
                                                 <li>
-                                                    <a href="{{path('admin_user_add')}}">
-                                                        New User
-                                                        <span class="badge badge-success float-right">New</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{path('admin_users')}}">
-                                                        Users Lists
-                                                        <span class="badge badge-success float-right">Lists</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{path('user_change_password')}}">
+                                                    <a href="{{path('app_user_change_password')}}">
                                                         Password
                                                         <span class="badge badge-success float-right">Change</span>
                                                     </a>
@@ -367,6 +390,7 @@
                     </ul>
                 </div>
             </div>
+            {% block javascript %} {% endblock %}
             <script src=''{{ asset('js/demo-skin-changer.js') }}></script> 
             <script src="{{ asset('js/jquery.min.js') }}"></script>
             <script src="{{ asset('js/popper.min.js') }}"></script>

@@ -8,7 +8,6 @@ use App\Form\CommentType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Exception\EnvNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -27,18 +26,18 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="app_homepage")
      */
     public function index(): Response
     {
-        $tricks = $this->trickRepository->findAll();
+        $tricks = $this->trickRepository->findBy(['activated' => 1]);
         return $this->render('home/index.html.twig', [
             'tricks' => $tricks
         ]);
     }
 
     /**
-     * @Route("/trick/{id}-{slug}", name="trick_show")
+     * @Route("/trick/show/{id}/{slug}", name="app_home_show")
      */
     public function show($id, Request $request): Response
     {
@@ -60,7 +59,7 @@ class HomeController extends AbstractController
 
             $this->addFlash('message', 'Votre commentaire a bien été envoyé');
             return $this->redirectToRoute(
-                'trick_show',
+                'app_trick_show',
                 [
                     'id' => $trick->getId(),
                     'slug' => $trick->getSlug()
