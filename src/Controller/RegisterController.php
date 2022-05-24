@@ -28,6 +28,7 @@ class RegisterController extends AbstractController
      */
     public function index(Mailer $mailer, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
+        //authentification
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
         $form->handleRequest($request);
