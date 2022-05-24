@@ -2,13 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\Trick;
 use App\Entity\Comment;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CommentType extends AbstractType
 {
@@ -20,6 +22,17 @@ class CommentType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Votre Commentaire'
+                ]
+            ])
+            ->add('trick', EntityType::class, [
+                'label' => 'Choose trick:',
+                'required' => true,
+                'class' => Trick::class,
+                'choice_label' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'attr' => [
+                    'class' => 'form-control'
                 ]
             ])
             ->add('submit', SubmitType::class, [

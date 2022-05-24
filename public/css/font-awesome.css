@@ -2,8 +2,11 @@
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
+
+
 /* FONT PATH
  * -------------------------- */
+
 @font-face {
     font-family: 'FontAwesome';
     src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
@@ -21,7 +24,9 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+
 /* makes the font 33% larger relative to the icon container */
+
 .fa-lg {
     font-size: 1.33333333em;
     line-height: 0.75em;
@@ -93,7 +98,9 @@
     margin-left: .3em;
 }
 
+
 /* Deprecated as of 4.4.0 */
+
 .pull-right {
     float: right;
 }
@@ -125,7 +132,6 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
-
     100% {
         -webkit-transform: rotate(359deg);
         transform: rotate(359deg);
@@ -137,7 +143,6 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
-
     100% {
         -webkit-transform: rotate(359deg);
         transform: rotate(359deg);
@@ -179,11 +184,11 @@
     transform: scale(1, -1);
 }
 
-:root .fa-rotate-90,
-:root .fa-rotate-180,
-:root .fa-rotate-270,
-:root .fa-flip-horizontal,
-:root .fa-flip-vertical {
+ :root .fa-rotate-90,
+ :root .fa-rotate-180,
+ :root .fa-rotate-270,
+ :root .fa-flip-horizontal,
+ :root .fa-flip-vertical {
     filter: none;
 }
 
@@ -216,8 +221,10 @@
     color: #ffffff;
 }
 
+
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
      readers do not read off random characters that represent icons */
+
 .fa-glass:before {
     content: "\f000";
 }

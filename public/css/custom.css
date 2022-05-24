@@ -120,15 +120,12 @@ button:active {
     #seeMedia {
         display: block;
     }
-
     #media {
         display: none;
     }
-
     .trickimages {
         padding-bottom: 30px;
     }
-
     .trickvideos {
         padding-bottom: 30px;
         max-width: 55%;
@@ -138,11 +135,13 @@ button:active {
 }
 
 .para {
-    text-align: justify !important;
+    text-align: justify!important;
     padding: 10px 50px;
 }
 
+
 /* LOGIN */
+
 .connexion,
 .inscription,
 .cgu {
@@ -164,7 +163,9 @@ button:active {
     text-decoration: underline
 }
 
+
 /* ONE TRICK */
+
 .modifydelete {
     position: absolute;
     top: 100px;
@@ -213,7 +214,9 @@ button:active {
     font-size: 13px;
 }
 
+
 /* END ONE TRICK */
+
 .btn:hover {
     transform: scale(1.03);
     box-shadow: 6px 6px 25px 18px rgba(0, 0, 0, 0.2);

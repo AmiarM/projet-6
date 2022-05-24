@@ -14,12 +14,14 @@
         "fakerphp/faker": "^1.19",
         "friendsofsymfony/ckeditor-bundle": "^2.4",
         "knplabs/knp-paginator-bundle": "^5.8",
+        "phpmailer/phpmailer": "^6.6",
+        "phpstan/phpstan": "^1.6",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
-        "symfony/flex": "^1.17|^2",
+        "symfony/flex": "^1.18",
         "symfony/form": "5.4.*",
         "symfony/framework-bundle": "5.4.*",
         "symfony/mailer": "5.4.*",
@@ -31,14 +33,14 @@
         "symfony/string": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
+        "symfony/web-profiler-bundle": "5.4.*",
         "symfony/yaml": "5.4.*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "symfony/debug-bundle": "5.4.*",
         "symfony/maker-bundle": "^1.38",
-        "symfony/stopwatch": "5.4.*",
-        "symfony/web-profiler-bundle": "5.4.*"
+        "symfony/stopwatch": "5.4.*"
     },
     "config": {
         "allow-plugins": {

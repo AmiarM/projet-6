@@ -32,6 +32,16 @@ class Image
      */
     private $trick;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isFirst;
+
+    public function __construct()
+    {
+        $this->isFirst = 0;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,6 +67,18 @@ class Image
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function isIsFirst(): ?bool
+    {
+        return $this->isFirst;
+    }
+
+    public function setIsFirst(bool $isFirst): self
+    {
+        $this->isFirst = $isFirst;
 
         return $this;
     }

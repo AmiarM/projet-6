@@ -22,7 +22,7 @@ class AccountController extends AbstractController
         $this->entityManager = $entityManagerInterface;
     }
     /**
-     * @Route("/account", name="user_account")
+     * @Route("/account", name="app_user_account")
      */
     public function index(): Response
     {
@@ -33,22 +33,24 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/account/password/change", name="user_change_password")
+     * @Route("/account/password/change", name="app_user_change_password")
      */
     public function changePassword(Request $request, UserPasswordHasherInterface $encoder)
     {
         $user = $this->getUser();
         $form = $this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            var_dump($form->getData());
-            die();
+        if ($form->isSubmitted()) {
+
             $old_pwd = $form->get('old_password')->getData();
             if ($encoder->isPasswordValid($user, $old_pwd)) {
+
                 $new_pwd = $form->get('new_password')->getData();
                 $user->setPassword($encoder->hashPassword($user, $new_pwd));
+
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
+                $this->addFlash('success', 'password changed seccessfully!!');
             }
         }
         return $this->render('account/password.html.twig', [

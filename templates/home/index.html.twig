@@ -1,56 +1,56 @@
 {% extends "base.html.twig" %}
-{% block stylesheet %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{asset('css/font-awesome.css')}}">
-    <link rel="stylesheet" href="{{asset('css/styles.css')}}">
-    <link rel="stylesheet" href="{{asset('css/grayscale.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/custom.css')}}">
-    <link rel="stylesheet" href="{{asset('css/zoombox.css')}}">
+{% block title %}
 {% endblock %}
 {% block body %}
-    <!-- Header -->
-    <header class="masthead" style="background-image:url('../../images/backflip.jpg')">
-        <div class="container d-flex h-100 align-items-center">
-            <div class="mx-auto text-center">
-                <h1 class="mx-auto my-0 text-uppercase">Snowtricks</h1>
-                <h2 class="text-black-50 mx-auto mt-2 mb-5">Le snowboard dans tous ces états</h2>
+{% include 'shared/_bannierre.html.twig' %}
+<section id="tricks" style="background-image: linear-gradient(to top, #a3bded 0%, #fff 100%);" class="projects-section bg-light">
+    <div class="container-fluid" >
+        <div class="col-md-12 text-center"></div>
+        <div class="row justify-content-md-center" id="list">
+            {% for trick  in tricks %}
+            <div class="col-md-2 col-xs-12 box-card">
+                <a href="{{path('app_home_show',{'id':trick.id,'slug':trick.slug})}}">
+                    <div class="md-12 trickcard">
+                        <img src="{{asset('images/gal.jpg')}}" class="img-fluid trick"/>
+                        <hr>
+                        <span>{{trick.name|upper}}</span>
+                    </div>
+                </a>
             </div>
-            <a href="#tricks" class="js-scroll-trigger">
-                <i class="fa fa-arrow-down fa-2x"></i>
-            </a>
+            {% endfor %}
         </div>
-    </header>
-    <!-- Projects Section -->
-    <section id="tricks" style="background-image: linear-gradient(to top, #FFF 0%, #FFF 100%);background-attachment: fixed;" class="projects-section bg-light">
-        <div class="container-fluid" >
-            <div class="col-md-12 text-center">
-            </div>
-            <div class="row justify-content-md-center" id="list" >
-             {% for trick  in tricks %}
-                <div class="col-md-2 col-xs-12 box-card" style="border:2px solid #ffa;">
-                    <a href="{{path('trick_show',{'id':trick.id,'slug':trick.slug})}}">
-                        <div class="md-12 trickcard">
-                            <img src="{{asset('images/backflip.jpg')}}" class="img-fluid trick"/>
-                            <hr>
-                            <div class="btn-toolbar">
-                                <span class="ml-1">{{trick.name}}</span>
-                               {% if app.user %} 
-                               <div class="btn-group ml-3 mb-1">
-                                <a class="btn btn-danger" href="#"><i class='fa fa-trash'></i></a>
-                                <a class="btn btn-success" href="{{path('trick_show',{'id':trick.id,'slug':trick.slug})}}"><i class='fa fa-edit'></i></a>
-                            </div>
-                               {%endif%}
-                              
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-            <button class="btn btn-success" href="#" id="loadMore">load more</button>
-            <a href="#tricks" class="js-scroll-trigger">
-                <i class="fa fa-arrow-up fa-2x"></i>
-            </a>
-        </div>
-    </section>
+        <button class="btn btn-success" href="#" id="loadMore">Voir plus</button>
+        <a href="#tricks" class="js-scroll-trigger">
+            <i class="fa fa-arrow-up fa-2x"></i>
+        </a>
+    <div>
+</section>
+{% endblock %}
+{% block javascript %}
+<script>
+    $(function () {
+        $(".box-card").slice(0, 10).show();
+        $("#loadMore").on('click', function (e) {
+            e.preventDefault();
+            $(".fa-arrow-up:hidden").slideDown();
+            $(".box-card:hidden").slice(0, 5).slideDown();
+            if ($(".box-card:hidden").length == 0) {
+                $("#load").fadeOut('slow');
+            }
+            $('html,body').animate({
+                scrollTop: $(this).offset().top
+            }, 1500);
+        });
+    });
+</script>
+<script>
+    $("[data-toggle='confirmation']").popConfirm({
+        title: "Supprimer ce trick ?", // The title of the confirm
+        //content: "I have warned you !", // The message of the confirm
+        placement: "bottom", // The placement of the confirm (Top, Right, Bottom, Left)
+        container: "body", // The html container
+        yesBtn: "Supprimer",
+        noBtn: "Annuler"
+    });
+</script>
 {% endblock %}

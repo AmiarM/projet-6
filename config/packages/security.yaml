@@ -22,7 +22,11 @@ security:
       provider: app_user_provider
       custom_authenticator: App\Security\LoginFormAuthenticator
       logout:
-        path: user_logout
+        path: app_user_logout
+      remember_me:
+        secret: "%kernel.secret%"
+        lifetime: 604800
+        path: /admin
         # where to redirect after logout
         # target: app_any_route
 
@@ -35,5 +39,5 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    # - { path: ^/admin, roles: ROLE_ADMIN }
-    # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/profile, roles: ROLE_USER }

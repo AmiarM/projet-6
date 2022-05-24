@@ -26,21 +26,21 @@ class TrickType extends AbstractType
                 'label' => 'Name',
                 'attr' => [
                     'placeholder' => 'Trick Name',
-                    'class' => 'form-control'
+                    'class' => 'form-control mb-2'
                 ]
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'attr' => [
                     'placeholder' => 'Trick Description',
-                    'class' => 'form-control'
+                    'class' => 'form-control mb-2'
                 ]
             ])
             ->add('slug', TextType::class, [
                 'label' => 'Slug',
                 'attr' => [
                     'placeholder' => 'Trick Slug',
-                    'class' => 'form-control'
+                    'class' => 'form-control mb-2'
                 ]
             ])
             ->add('categorie', EntityType::class, [
@@ -51,7 +51,7 @@ class TrickType extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control mb-2'
                 ]
             ])
             //on ajoute le champ image dans le formulaire
@@ -63,12 +63,18 @@ class TrickType extends AbstractType
                 'multiple' => true
             ])
             ->add('videos', CollectionType::class, [
-                'required' => false,
+                'label' => false,
                 'entry_type' => VideoType::class,
-                'entry_options' => ['label' => false],
+                'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false,
+                'error_bubbling' => false
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Valider',
+                'attr' => [
+                    'class' => 'btn btn-primary btn-block'
+                ]
             ]);
     }
 

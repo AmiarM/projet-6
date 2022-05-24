@@ -81,14 +81,12 @@ class CommentController extends AbstractController
     // }
 
     /**
-     * @Route("/{id}/delete", name="app_comment_delete",methods={"GET"})
+     * @Route("/{id}/delete", name="app_comment_delete",methods={"DELETE","POST"})
      */
     public function delete(Request $request, Comment $comment, CommentRepository $commentRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
             $commentRepository->remove($comment);
-        } else {
-            die('ko');
         }
 
         return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
@@ -108,5 +106,13 @@ class CommentController extends AbstractController
         return $this->render('trick/comments.html.twig', [
             'comment' => $comment
         ]);
+    }
+
+    /**
+     * @Route("/personal/lists", name="app_comment_lists", methods={"GET"})
+     */
+    public function myComments(): Response
+    {
+        return $this->render('comment/mycomments.html.twig');
     }
 }

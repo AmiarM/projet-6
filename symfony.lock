@@ -116,6 +116,9 @@
     "nikic/php-parser": {
         "version": "v4.13.2"
     },
+    "phpmailer/phpmailer": {
+        "version": "v6.6.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
