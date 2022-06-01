@@ -53,7 +53,7 @@ class Comment
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="comments",cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="comments",cascade={"persist"})
      */
     private $trick;
 

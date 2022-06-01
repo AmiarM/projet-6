@@ -1,10 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Créer une Catégorie{% endblock %}
+
+{% block admin %}
 <div class="row">
     <div class="col-lg-12">
         <div id="content-header" class="clearfix">
             <div class="float-left">
                 <ol class="breadcrumb">
-                    <li><a href="{{path('app_homepage')}}">Home</a></li>
-                    <li class="active"><span>Video</span></li>
+                    <li><a href="{{path('app_admin')}}">Home</a></li>
+                    <li class="active"><span>User</span></li>
                     <li class="active"><span>{{action}}</span></li>
                 </ol>
             </div>
@@ -19,11 +24,11 @@
             </header>
             <div class="main-box-body clearfix">
                 {{form_start(form)}}
-                {{form_row(form.url)}}
-                {{form_row(form.trick)}}
+                {{form_row(form.name)}}
+                {{form_row(form.submit)}}
                 {{form_end(form)}}
             </div>
         </div>
     </div>
 </div>
-
+{% endblock %}

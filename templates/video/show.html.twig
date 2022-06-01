@@ -1,26 +1,82 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Video{% endblock %}
+{% block title %}video{% endblock %}
 
 {% block admin %}
-    <h1>Video</h1>
+{% for message in app.flashes('error') %}
+<div class="col-lg-12 text-center">
+    <div class="alert alert-danger">
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
+{% for message in app.flashes('success') %}
+    <div class="col-lg-12 text-center">
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    </div>
+{% endfor %}
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">TITRE DU TRICK:{{video.trick.name|upper}}</h1>
+    </div>
+</section>
+<div class="container">
+    <div class="row">
+        <!-- video -->
+        <div class="col-12 col-lg-6">
+            <div class="card bg-light mb-3" style="height:666.5px">
+                <div class="card-body">
+                    <a href="" data-toggle="modal" data-target="#productModal">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="{{video.url}}" width=150px; height=150px;></iframe>
+                        </div>
+                    </a>
+                </div>  
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ video.id }}</td>
-            </tr>
-            <tr>
-                <th>Url</th>
-                <td>{{ video.url }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="col-12 col-lg-6 add_to_cart_block">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="comment-widgets">
+                        <!-- Comment Row -->
+                        <div class="d-flex flex-row comment-row mt-3">
+                            <div class="p-2"><img src="{{asset('/uploads/'~video.trick.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                            <div class="comment-text w-100 mb-3">
+                                <h6 class="font-medium" style="font-weight:bold;">Trick posté par: {{video.trick.user.firstname|upper}} {{video.trick.user.lastname|upper}}</h6> 
+                                <hr>
+                                <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">published at: {{video.trick.createdAt|date('d/m/y à H:i:s')}}
+                                </span>  
+                                {{ include('video/_delete_form.html.twig') }}
+                            </div>
+                        </div> <!-- Comment Row -->
+                    </div> <!-- Card -->
+                    <form method="get" action="cart.html">
+                        <div class="form-group">
+                            <label for="colors" style="font-weight:bold;">Categorie du Trick</label>
+                            <br>
+                            {{video.trick.categorie.name}}
+                        </div>
+                        <div class="form-group">
+                            <label for="colors" style="font-weight:bold;">Slug du Trick</label>
+                            <br>
+                            {{video.trick.slug}}
+                        </div>
+                        <div class="form-group">
+                            <label for="colors" style="font-weight:bold;">Name</label>
+                            <br>
+                            {{video.url}}
+                        </div>
+                        <a href="{{ path('app_video_index') }}" class="btn btn-success btn-lg btn-block text-uppercase">
+                            <i class="fa fa-arrow-left"></i> back to Trick Lists
+                        </a>
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_video_index') }}">back to list</a>
-
-    <a href="{{ path('app_video_edit', {'id': video.id}) }}">edit</a>
-
-    {{ include('video/_delete_form.html.twig') }}
+</div>
 {% endblock %}

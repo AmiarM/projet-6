@@ -14,7 +14,7 @@
                         <div class="images p-3">
                             {% for image in comment.trick.images%}
                              {%if image.isFirst == 1%}
-                                <div class="text-center p-4"> <img id="main-image" src="{{asset('/uploads/'~ image.name)}}" width="250" /> </div>
+                                <div class="text-center p-4"> <img id="main-image" src="{{asset('/uploads/'~ image.name)}}" width="500"  class="img-thumbnail"/> </div>
                             {%else%}
                             <div class="thumbnail text-center"> 
                                 <img onclick="change_image(this)" src="{{asset('/uploads/'~ image.name)}}" width="70" style="float:left; margin-right:10px;" class="img-thumbnail"> 

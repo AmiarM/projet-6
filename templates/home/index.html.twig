@@ -11,7 +11,16 @@
             <div class="col-md-2 col-xs-12 box-card">
                 <a href="{{path('app_home_show',{'id':trick.id,'slug':trick.slug})}}">
                     <div class="md-12 trickcard">
-                        <img src="{{asset('images/gal.jpg')}}" class="img-fluid trick"/>
+                        {% set noFirst = 1 %}
+                        {% for image in trick.images %}
+                            {% if image.isFirst == 1 %}
+                                {% set noFirst=0 %}
+                                <img src="{{asset('/uploads/'~image.name)}}" class="img-fluid trick"/>
+                            {% endif %}
+                        {% endfor %}
+                        {% if noFirst %}
+                        <img src="{{asset('images/bannierre.jpg')}}" class="img-fluid trick"/>
+                        {% endif %}
                         <hr>
                         <span>{{trick.name|upper}}</span>
                     </div>

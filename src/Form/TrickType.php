@@ -36,13 +36,6 @@ class TrickType extends AbstractType
                     'class' => 'form-control mb-2'
                 ]
             ])
-            ->add('slug', TextType::class, [
-                'label' => 'Slug',
-                'attr' => [
-                    'placeholder' => 'Trick Slug',
-                    'class' => 'form-control mb-2'
-                ]
-            ])
             ->add('categorie', EntityType::class, [
                 'label' => 'Choose catégorie:',
                 'required' => true,
@@ -63,12 +56,15 @@ class TrickType extends AbstractType
                 'multiple' => true
             ])
             ->add('videos', CollectionType::class, [
-                'label' => false,
                 'entry_type' => VideoType::class,
-                'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'error_bubbling' => false
+                'mapped' => false,
+                'by_reference' => false,
+                'entry_options' => [
+                    'label' => false,
+                    'attr' => ['class' => 'form-control'],
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',

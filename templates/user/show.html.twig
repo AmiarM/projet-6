@@ -6,17 +6,17 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <a href="{{path('admin_users')}}" class="btn btn-primary"><i class="fa fa-list" aria-hidden="true"></i>
+            <a href="{{path('app_users')}}" class="btn btn-primary"><i class="fa fa-list" aria-hidden="true"></i>
                 USERS LISTS
             </a>
         </div>
         <div class="col-md-4">
-            <a href="{{path('admin_user_activate',{'id':user.id})}}" class="btn btn-success"><i class="fas fa-toggle-on"></i>
+            <a href="{{path('app_user_activate',{'id':user.id})}}" class="btn btn-success"><i class="fas fa-toggle-on"></i>
                Activate
             </a>
         </div>
         <div class="col-md-4">
-            <a href="{{path('admin_user_delete',{'id':user.id})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>
+            <a href="{{path('app_user_delete',{'id':user.id})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>
                 Delete
             </a>
         </div>

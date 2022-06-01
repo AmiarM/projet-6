@@ -16,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
 
-    private $entityManagerInterface;
+    private $manager;
     private $trickRepository;
 
-    public function __construct(EntityManagerInterface $entityManagerInterface, TrickRepository $trickRepository)
+    public function __construct(EntityManagerInterface $manager, TrickRepository $trickRepository)
     {
-        $this->entityManagerInterface = $entityManagerInterface;
+        $this->manager = $manager;
         $this->trickRepository = $trickRepository;
     }
 
@@ -42,6 +42,9 @@ class HomeController extends AbstractController
     public function show($id, Request $request): Response
     {
         $trick = $this->trickRepository->find($id);
+        if (!$trick) {
+            throw new NotFoundHttpException("trick not found");
+        }
         $user = $this->getUser();
         if (!$user) {
             throw new NotFoundHttpException("user not found");
@@ -54,12 +57,12 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setTrick($trick);
             $comment->setUser($user);
-            $this->entityManagerInterface->persist($comment);
-            $this->entityManagerInterface->flush();
+            $this->manager->persist($comment);
+            $this->manager->flush();
 
-            $this->addFlash('message', 'Votre commentaire a bien été envoyé');
+            $this->addFlash('message', 'your comment is posted!');
             return $this->redirectToRoute(
-                'app_trick_show',
+                'app_home_show',
                 [
                     'id' => $trick->getId(),
                     'slug' => $trick->getSlug()

@@ -8,7 +8,6 @@ use App\Entity\Video;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Func;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +21,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class TrickController extends AbstractController
 {
-    private $entityManagerInterface;
+    private $manager;
 
-    public function __construct(EntityManagerInterface $entityManagerInterface)
+    public function __construct(EntityManagerInterface $manager)
     {
-        $this->entityManagerInterface = $entityManagerInterface;
+        $this->manager = $manager;
     }
 
     /**
@@ -55,7 +54,7 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             //on récupére les images transmises
             $images = $form->get('images')->getData();
             //on boucle sur les images
@@ -73,8 +72,8 @@ class TrickController extends AbstractController
                 $trick->addImage($image);
             }
             $trick->setUser($user);
-            $this->entityManagerInterface->persist($trick);
-            $this->entityManagerInterface->flush();
+            $this->manager->persist($trick);
+            $this->manager->flush();
             $this->addFlash('success', 'Trick successfully added!');
             return $this->redirectToRoute('app_trick_index');
         }
@@ -91,6 +90,9 @@ class TrickController extends AbstractController
      */
     public function show(Trick $trick, PaginatorInterface $paginator, TrickRepository $trickRepository, Request $request): Response
     {
+        if (!$trick) {
+            throw new NotFoundHttpException('Trick  not  found');
+        }
         $comments = $trick->getComments();
         $paginations = $paginator->paginate(
             $comments, /* query NOT result */
@@ -109,6 +111,9 @@ class TrickController extends AbstractController
     public function edit(Request $request, Trick $trick, TrickRepository $trickRepository): Response
     {
         $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_user_login');
+        }
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
@@ -131,6 +136,7 @@ class TrickController extends AbstractController
             }
             $trick->setUser($user);
             $trickRepository->add($trick);
+            $this->addFlash('success', 'Trick edited Successfuly');
             return $this->redirectToRoute('app_trick_index');
         }
 
@@ -145,7 +151,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/image/{id}", name="app_trick_image_delete", methods={"DELETE"})
      */
-    public function deleteImage(Image $image, Request $request, EntityManagerInterface $em)
+    public function deleteImage(Image $image, Request $request)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -157,9 +163,9 @@ class TrickController extends AbstractController
             unlink($this->getParameter('images_directory') . '/' . $nom);
 
             // On supprime l'entrée de la base
-            $em->remove($image);
-            $em->flush();
-
+            $this->manager->remove($image);
+            $this->manager->flush();
+            $this->addFlash('success', 'trick deleted successfuly');
             // On répond en json
             return new JsonResponse(['success' => 1]);
         } else {
@@ -193,20 +199,25 @@ class TrickController extends AbstractController
         if (!$trick) {
             throw new NotFoundHttpException('Trick not Found');
         }
-        $trick->setActivated(1);
-        $this->entityManagerInterface->flush();
+        if ($trick->getActivated() == 1) {
+            $this->addFlash('error', 'Trick already acivated');
+        } else {
+            $trick->setActivated(1);
+            $this->addFlash('success', 'Trick acivated successfuly');
+        }
+        $this->manager->flush();
         return $this->redirectToRoute('app_trick_index');
     }
 
     /**
-     * @Route("/video/delete/{id}", name="app_video_delete", methods={"DELETE"})
+     * @Route("/video/delete/{id}", name="app_trick_video_delete", methods={"POST"})
      */
-    public function deleteVideo(Request $request, Video $video, EntityManagerInterface $em): Response
+    public function deleteVideo(Request $request, Video $video): Response
     {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete' . $video->getId(), $data['_token'])) {
-            $em->remove($video);
-            $em->flush();
+            $this->manager->remove($video);
+            $this->manager->flush();
 
             // On répond en json
             return new JsonResponse(['success' => 1]);
@@ -218,14 +229,17 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="app_trick_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_trick_delete", methods={"POST"})
      */
     public function delete(Request $request, Trick $trick, TrickRepository $trickRepository): Response
     {
+        if (!$trick) {
+            throw new NotFoundHttpException('Trick not Found');
+        }
         if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
             $trickRepository->remove($trick);
+            $this->addFlash('success', 'Trick deleted successfuly');
         }
-
         return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -234,11 +248,19 @@ class TrickController extends AbstractController
      */
     public function promote(Image $image, EntityManagerInterface $em)
     {
+        $trick = $image->getTrick();
         if (!$image) {
             throw new NotFoundHttpException('Image Not Foud');
         }
+        if ($image->getIsFirst()) {
+            $this->addFlash('error', 'this image is first');
+        }
         $image->setIsFirst(1);
         $em->flush();
+        $this->addFlash('success', 'status changed successfully');
+        return $this->redirectToRoute('app_image_show', [
+            'id' => $image->getId()
+        ]);
     }
 
     /**

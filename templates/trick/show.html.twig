@@ -46,8 +46,8 @@
                                 <hr>
                                 <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">published at: {{trick.createdAt|date('d/m/y à H:i:s')}}
                                 </span>  
-                                <a type="button" href="{{path('app_trick_activated',{'id':trick.id})}}" class="btn btn-success btn-sm">Publish</a>
-                                <a type="button" href="{{path('app_trick_delete',{'id':trick.id})}}" class="btn btn-danger btn-sm">Delete</a> </div>
+                                <a type="button" href="{{path('app_trick_activated',{'id':trick.id})}}" class="btn btn-success btn-sm mr-1" style="float:left;"><i class="fas fa-newspaper"></i></a>
+                                {{ include('trick/_delete_form.html.twig') }}
                             </div>
                         </div> <!-- Comment Row -->
                     </div> <!-- Card -->
@@ -97,7 +97,7 @@
             </div>
         </div>
 
-        <!-- Reviews -->
+        <!-- Revideoews -->
         <div class="col-12" id="reviews">
             <div class="card border-light mb-3">
                 <div class="card-header bg-primary text-white text-uppercase"><i class="fa fa-comment"></i> Comments</div>

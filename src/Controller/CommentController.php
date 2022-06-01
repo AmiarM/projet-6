@@ -37,9 +37,10 @@ class CommentController extends AbstractController
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $comment->setUser($user);
             $commentRepository->add($comment);
+            $this->addFlash('success', 'comment successfully added!');
             return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -81,12 +82,13 @@ class CommentController extends AbstractController
     // }
 
     /**
-     * @Route("/{id}/delete", name="app_comment_delete",methods={"DELETE","POST"})
+     * @Route("/{id}/delete", name="app_comment_delete",methods={"POST"})
      */
     public function delete(Request $request, Comment $comment, CommentRepository $commentRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
             $commentRepository->remove($comment);
+            $this->addFlash('error', 'comment  deleted successfully');
         }
 
         return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
@@ -100,7 +102,12 @@ class CommentController extends AbstractController
         if (!$comment) {
             throw new NotFoundHttpException('comment not found');
         }
-        $comment->setActivated(1);
+        if ($comment->getActivated() == 1) {
+            $this->addFlash('error', 'comment already activated');
+        } else {
+            $comment->setActivated(1);
+            $this->addFlash('success', 'comment activated successfully');
+        }
         $commentRepository->add($comment);
         return $this->redirectToRoute('app_comment_index');
         return $this->render('trick/comments.html.twig', [

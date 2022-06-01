@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Length;
@@ -41,6 +42,7 @@ class Trick
     private $description;
 
     /**
+     * @Gedmo\Slug(fields={"name"}) 
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="le slug du trick est obligatoire!")
      * @Assert\Length(min=3,max=50,minMessage="le slug du trick doit avoir au moins 3 caractères")
@@ -128,13 +130,6 @@ class Trick
     public function getSlug(): ?string
     {
         return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface

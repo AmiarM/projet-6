@@ -5,26 +5,12 @@
 {% block admin %}
     <div class="container mb-5">
         <div class="row">
-            {% for message in app.flashes('error') %}
-            <div class="col-lg-12 text-center">
-                <div class="alert alert-danger">
-                    {{ message }}
-                </div>
-            </div>
-            {% endfor %}
-            {% for message in app.flashes('success') %}
-                <div class="col-lg-12 text-center">
-                    <div class="alert alert-success">
-                        {{ message }}
-                    </div>
-                </div>
-            {% endfor %}
             <div class="col-lg-12">
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
                         <ol class="breadcrumb">
-                            <li><a href="{{path('app_homepage')}}">Home</a></li>
-                            <li class="active"><span>videos</span></li>
+                            <li><a href="#">Home</a></li>
+                            <li class="active"><span>Categories</span></li>
                         </ol>
                     </div>
                 </div>
@@ -33,9 +19,16 @@
         <div class="row">
             <div class="container mb-5">
                 <div class="row">
+                    {% for message in app.flashes('success') %}
+                        <div class="col-lg-12 text-center">
+                            <div class="alert alert-success">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
                     {% if paginations|length ==0 %}
                         <div class="alert alert-danger" style="text-align: center;">
-                            Aucune video en Base de Données
+                            Aucune Catégorie en Base de Données
                         </div>
                     {% else %}
                     <div class="container-fluid">
@@ -43,9 +36,9 @@
                             <div class="col-lg-12">
                                 <div class="main-box clearfix">
                                     <header class="main-box-header clearfix">
-                                        <h2>MANAGE video</h2>
+                                        <h2>MANAGE CATEGORIE</h2>
                                         <div id="reportrange" class="float-right daterange-filter">
-                                            <a href="{{path('app_video_new')}}" class="table-link">
+                                            <a href="{{path('app_categorie_add')}}" class="table-link">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                         <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
@@ -58,36 +51,27 @@
                                             <table id="table-example" class="table table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Url</th>
-                                                        <th>TRICK</th>
-                                                        <th>ACTIONS </th>
+                                                        <th>Name</th>
+                                                        <th>ACTIONS</th>
                                                     </tr>
                                                 </thead>
                                             <tbody>
-                                                {% for video in paginations%}
+                                                {% for categorie in paginations%}
                                                 <tr>
+                                                    <td>{{categorie.name}}</td>
                                                     <td>
-                                                        <div class="embed-responsive embed-responsive-16by9">
-                                                            <iframe class="embed-responsive-item" src="{{video.url}}" width=50px; height=50px;></iframe>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        {{video.trick.name}}
-                                                    </td>
-                                                    <td>
-                                                        <a style="float:left; margin-right:0px;" href="{{path('app_video_edit',{'id':video.id})}}" class="table-link">
+                                                        <a href="{{ path('app_categorie_edit',{'id':categorie.id}) }}" class="table-link">
                                                             <span class="fa-stack">
                                                                 <i class="fa fa-square fa-stack-2x"></i>
                                                                     <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
                                                             </span>
                                                         </a>
-                                                        <a style="float:left; margin-right:0px;" href="{{path('app_video_show',{'id':video.id})}}" class="table-link success mr-2">
+                                                        <a href="{{ path('app_categorie_delete',{'id':categorie.id}) }}" class="table-link danger">
                                                             <span class="fa-stack">
                                                                 <i class="fa fa-square fa-stack-2x"></i>
-                                                                    <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
+                                                                    <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
                                                             </span>
                                                         </a>
-                                                        {{ include('video/_delete_form.html.twig') }}
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
@@ -101,5 +85,5 @@
                             </div>
                         </div>
                     </div>
-    {% endif %}
+                    {% endif %}
 {% endblock %}

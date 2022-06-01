@@ -6,6 +6,7 @@ use App\Entity\Video;
 use App\Form\VideoType;
 use App\Form\Video1Type;
 use App\Repository\VideoRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,10 +20,16 @@ class VideoController extends AbstractController
     /**
      * @Route("/", name="app_video_index", methods={"GET"})
      */
-    public function index(VideoRepository $videoRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, VideoRepository $videoRepository): Response
     {
+        $videos = $videoRepository->findAll();
+        $paginations = $paginator->paginate(
+            $videos, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            10 /* limit per page */
+        );
         return $this->render('video/index.html.twig', [
-            'videos' => $videoRepository->findAll(),
+            'paginations' => $paginations
         ]);
     }
 
@@ -44,6 +51,7 @@ class VideoController extends AbstractController
         return $this->renderForm('video/new.html.twig', [
             'video' => $video,
             'form' => $form,
+            'action' => 'Add video'
         ]);
     }
 
@@ -74,18 +82,19 @@ class VideoController extends AbstractController
         return $this->renderForm('video/edit.html.twig', [
             'video' => $video,
             'form' => $form,
+            'action' => 'Edit Video'
         ]);
     }
 
-    // /**
-    //  * @Route("/{id}", name="app_video_delete", methods={"POST"})
-    //  */
-    // public function delete(Request $request, Video $video, VideoRepository $videoRepository): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete' . $video->getId(), $request->request->get('_token'))) {
-    //         $videoRepository->remove($video, true);
-    //     }
+    /**
+     * @Route("/{id}", name="app_video_delete", methods={"POST"})
+     */
+    public function delete(Request $request, Video $video, VideoRepository $videoRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $video->getId(), $request->request->get('_token'))) {
+            $videoRepository->remove($video, true);
+        }
 
-    //     return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
-    // }
+        return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
+    }
 }
