@@ -2,26 +2,27 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HomeController extends AbstractController
 {
 
-    private $entityManagerInterface;
+    private $manager;
     private $trickRepository;
 
-    public function __construct(EntityManagerInterface $entityManagerInterface, TrickRepository $trickRepository)
+    public function __construct(EntityManagerInterface $manager, TrickRepository $trickRepository)
     {
-        $this->entityManagerInterface = $entityManagerInterface;
+        $this->manager = $manager;
         $this->trickRepository = $trickRepository;
     }
 
@@ -39,13 +40,22 @@ class HomeController extends AbstractController
     /**
      * @Route("/trick/show/{id}/{slug}", name="app_home_show")
      */
-    public function show($id, Request $request): Response
+    public function show($id, Request $request, PaginatorInterface $paginator): Response
     {
         $trick = $this->trickRepository->find($id);
-        $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("user not found");
+        $comments = $trick->getComments();
+        $paginations = $paginator->paginate(
+            $comments, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            3 /* limit per page */
+        );
+        if (!$trick) {
+            throw new NotFoundHttpException("trick not found");
         }
+        // $user = $this->getUser();
+        // if (!$user) {
+        //     throw new NotFoundHttpException("user not found");
+        // }
         //on créer le commentaire vièrge
         $comment = new Comment();
         //on génére le formulaire
@@ -54,12 +64,12 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setTrick($trick);
             $comment->setUser($user);
-            $this->entityManagerInterface->persist($comment);
-            $this->entityManagerInterface->flush();
+            $this->manager->persist($comment);
+            $this->manager->flush();
 
-            $this->addFlash('message', 'Votre commentaire a bien été envoyé');
+            $this->addFlash('message', 'your comment is posted!');
             return $this->redirectToRoute(
-                'app_trick_show',
+                'app_home_show',
                 [
                     'id' => $trick->getId(),
                     'slug' => $trick->getSlug()
@@ -68,7 +78,8 @@ class HomeController extends AbstractController
         }
         return $this->render('home/show.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'paginations' => $paginations
         ]);
     }
 }

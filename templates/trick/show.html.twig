@@ -17,7 +17,7 @@
                 {% if image.isFirst == 1%}
                 <div class="card-body">
                     <a href="" data-toggle="modal" data-target="#productModal">
-                        <img class="img-fluid" src="{{asset('/uploads/'~ image.name)}}" />
+                        <img class="img-fluid" src="{{ image.name}}" />
                     </a>
                 </div>  
                 {% endif %}
@@ -32,7 +32,7 @@
                     <div class="comment-widgets">
                         <!-- Comment Row -->
                         <div class="d-flex flex-row comment-row mt-3">
-                            <div class="p-2"><img src="{{asset('/uploads/'~trick.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                            <div class="p-2"><img src="{{trick.user.avatar}}" alt="user" width="50" class="rounded-circle"></div>
                             <div class="comment-text w-100 mb-3">
                                 <h6 class="font-medium" style="font-weight:bold;">{{trick.user.firstname|upper}} {{trick.user.lastname|upper}}</h6> 
                                 <p>
@@ -46,8 +46,12 @@
                                 <hr>
                                 <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">published at: {{trick.createdAt|date('d/m/y à H:i:s')}}
                                 </span>  
-                                <a type="button" href="{{path('app_trick_activated',{'id':trick.id})}}" class="btn btn-success btn-sm">Publish</a>
-                                <a type="button" href="{{path('app_trick_delete',{'id':trick.id})}}" class="btn btn-danger btn-sm">Delete</a> </div>
+                                {% for role in app.user.roles%}
+                                    {% if role == "ROLE_ADMIN" %}
+                                    <a type="button" href="{{path('app_trick_activated',{'id':trick.id})}}" class="btn btn-success btn-sm mr-1" style="float:left;"><i class="fas fa-newspaper"></i></a>
+                                    {% endif %}
+                                {% endfor %}
+                                {{ include('trick/_delete_form.html.twig') }}
                             </div>
                         </div> <!-- Comment Row -->
                     </div> <!-- Card -->
@@ -97,7 +101,7 @@
             </div>
         </div>
 
-        <!-- Reviews -->
+        <!-- Revideoews -->
         <div class="col-12" id="reviews">
             <div class="card border-light mb-3">
                 <div class="card-header bg-primary text-white text-uppercase"><i class="fa fa-comment"></i> Comments</div>
@@ -106,7 +110,7 @@
                     <div class="comment-widgets">
                         <!-- Comment Row -->
                         <div class="d-flex flex-row comment-row mt-3">
-                            <div class="p-2"><img src="{{asset('/uploads/'~comment.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                            <div class="p-2"><img src="{{comment.user.avatar}}" alt="user" width="50" class="rounded-circle"></div>
                             <div class="comment-text w-100 mb-3">
                                 <h6 class="font-medium" style="font-weight:bold;">{{comment.user.firstname|upper}} {{comment.user.lastname|upper}}</h6> 
                                 <p>
@@ -128,6 +132,9 @@
                         </div> <!-- Comment Row -->
                     </div> <!-- Card -->
                     {% endfor %}
+                </div>
+                <div class="navigation">
+                    {{ knp_pagination_render(paginations) }}
                 </div>
             </div>
         </div>

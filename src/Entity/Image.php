@@ -71,7 +71,7 @@ class Image
         return $this;
     }
 
-    public function isIsFirst(): ?bool
+    public function getIsFirst(): ?bool
     {
         return $this->isFirst;
     }

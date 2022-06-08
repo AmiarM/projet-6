@@ -83,38 +83,12 @@ class RegisterController extends AbstractController
             throw new NotFoundHttpException('User Innéxistant');
         }
         //on supprime le token 
-        $user->setToken('null');
+        $user->setToken('NULL');
         $user->setActivated(1);
         $em->persist($user);
         $em->flush();
         //on envoie un message flash
         $this->addFlash('success', 'user actiavated');
         return $this->redirectToRoute('app_user_login');
-    }
-
-    /*************************************************************** */
-    public function sendMail($destinataire, $subject, $messages, $altBody, $redirect)
-    {
-        //------smtp settings
-        $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = "localhost";
-        $mail->Port = 1025;
-        $mail->SMTPAutoTLS = false;
-        //------email settings
-        $mail->isHTML(true);
-        $mail->SetFrom("mohamed.amiar@gmail.com", "amiar");
-        $mail->AddAddress($destinataire);
-        $mail->Subject  = $subject;
-        $mail->Body     = $messages;
-        $mail->AltBody = $altBody;
-
-        if (!$mail->Send()) {
-            echo 'Message was not sent.';
-            echo 'Mailer error: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent.';
-            $this->redirect($redirect);
-        }
     }
 }

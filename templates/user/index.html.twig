@@ -7,6 +7,20 @@
 {% block admin %}
     <div class="container mb-5">
         <div class="row">
+            {% for message in app.flashes('success') %}
+                <div class="col-lg-12 text-center">
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+            <div class="col-lg-12 text-center">
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
             <div class="col-lg-12">
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
@@ -38,7 +52,7 @@
                                     {% for user in paginations %}
                                         <tr>
                                             <td>
-                                                <img src="{{asset('/uploads/'~user.avatar)}}" alt=""  style="width:50px;height:50px;border-radius:5px;"/>
+                                                <img src="{{user.avatar}}" alt=""  style="width:50px;height:50px;border-radius:5px;"/>
                                                 <br>
                                                 <span class="user-subhead text-primary" >
                                                     {% for role in user.roles %}
@@ -67,19 +81,19 @@
                                                 {% endif %}
                                                 </td>
                                             <td style="width: 20%;">
-                                                <a href="{{path('admin_user_show',{'id':user.id})}}" class="table-link">
+                                                <a href="{{path('app_user_show',{'id':user.id})}}" class="table-link">
                                                     <span class="fa-stack">
                                                         <i class="fa fa-square fa-stack-2x"></i>
                                                         <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
                                                     </span>
                                                 </a>
-                                                <a href="{{path('admin_user_delete',{'id':user.id})}}" class="table-link danger">
+                                                <a href="{{path('app_user_delete',{'id':user.id})}}" class="table-link danger">
                                                     <span class="fa-stack">
                                                         <i class="fa fa-square fa-stack-2x"></i>
                                                         <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
                                                     </span>
                                                 </a>
-                                                <a href="{{path('admin_user_edit',{'id':user.id})}}" class="table-link">
+                                                <a href="{{path('app_user_edit',{'id':user.id})}}" class="table-link">
                                                     <span class="fa-stack">
                                                         <i class="fa fa-square fa-stack-2x"></i>
                                                         <i class="fa fa-edit fa-stack-1x fa-inverse"></i>

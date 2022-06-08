@@ -24,17 +24,17 @@ class CommentType extends AbstractType
                     'placeholder' => 'Votre Commentaire'
                 ]
             ])
-            ->add('trick', EntityType::class, [
-                'label' => 'Choose trick:',
-                'required' => true,
-                'class' => Trick::class,
-                'choice_label' => 'name',
-                'multiple' => false,
-                'expanded' => false,
-                'attr' => [
-                    'class' => 'form-control'
-                ]
-            ])
+            // ->add('trick', EntityType::class, [
+            //     'label' => 'Choose trick:',
+            //     'required' => true,
+            //     'class' => Trick::class,
+            //     'choice_label' => 'name',
+            //     'multiple' => false,
+            //     'expanded' => false,
+            //     'attr' => [
+            //         'class' => 'form-control'
+            //     ]
+            // ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Envoyer',
                 'attr' => [

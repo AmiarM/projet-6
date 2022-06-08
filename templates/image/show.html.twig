@@ -1,0 +1,101 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Image{% endblock %}
+
+{% block admin %}
+{% for message in app.flashes('error') %}
+<div class="col-lg-12 text-center">
+    <div class="alert alert-danger">
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
+{% for message in app.flashes('success') %}
+    <div class="col-lg-12 text-center">
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    </div>
+{% endfor %}
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">TITRE DU TRICK:{{image.trick.name|upper}}</h1>
+    </div>
+</section>
+<div class="container">
+    <div class="row">
+        <!-- Image -->
+        <div class="col-12 col-lg-6">
+            <div class="card bg-light mb-3" style="height:666.5px">
+                <div class="card-body">
+                    <a href="" data-toggle="modal" data-target="#productModal">
+                        <img class="img-fluid" src="{{ image.name}}" />
+                    </a>
+                </div>  
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6 add_to_cart_block">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="comment-widgets">
+                        <!-- Comment Row -->
+                        <div class="d-flex flex-row comment-row mt-3">
+                            <div class="p-2"><img src="{{asset('/uploads/'~image.trick.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                            <div class="comment-text w-100 mb-3">
+                                <h6 class="font-medium" style="font-weight:bold;">Trick posté par: {{image.trick.user.firstname|upper}} {{image.trick.user.lastname|upper}}</h6> 
+                                <p>
+                                  {% if image.isFirst == 0 %} 
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Not First</label>
+                                  </div>
+                                  {% else %}
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">First</label>
+                                  </div>
+                                  {% endif %}
+                                </p>
+                                <br>
+                                <hr>
+                                <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">published at: {{image.trick.createdAt|date('d/m/y à H:i:s')}}
+                                </span>  
+                                <a style="float:left;" type="button" href="{{path('app_trick_image_promote',{'id':image.id})}}" class="btn btn-success btn-sm mr-1"><i class="fas fa-toggle-on"></i></a>
+                                {{ include('image/_delete_form.html.twig') }}
+                            </div>
+                        </div> <!-- Comment Row -->
+                    </div> <!-- Card -->
+                    <form method="get" action="cart.html">
+                        <div class="form-group">
+                            <label for="colors" style="font-weight:bold;">Categorie du Trick</label>
+                            <br>
+                            {{image.trick.categorie.name}}
+                        </div>
+                        <div class="form-group">
+                            <label for="colors" style="font-weight:bold;">Slug du Trick</label>
+                            <br>
+                            {{image.trick.slug}}
+                        </div>
+                        <div class="form-group">
+                            <label for="colors" style="font-weight:bold;">Name</label>
+                            <br>
+                            {{image.name}}
+                        </div>
+                        <a href="{{ path('app_image_index') }}" class="btn btn-success btn-lg btn-block text-uppercase">
+                            <i class="fa fa-arrow-left"></i> back to image Lists
+                        </a>
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <a href="{{ path('app_image_index') }}" class="btn btn-success btn-sm" style="float:left; margin-right:5px;"><i class="fa fa-arrow-left"></i></a>
+
+    <a href="{{ path('app_image_edit', {'id': image.id}) }} " class="btn btn-primary btn-sm" style="float:left; margin-right:5px;"><i class="fa fa-edit"></i></a>
+
+    {{ include('image/_delete_form.html.twig') }}
+{% endblock %}

@@ -5,12 +5,26 @@
 {% block admin %}
     <div class="container mb-5">
         <div class="row">
+            {% for message in app.flashes('error') %}
+            <div class="col-lg-12 text-center">
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+            {% for message in app.flashes('success') %}
+                <div class="col-lg-12 text-center">
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
             <div class="col-lg-12">
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
                         <ol class="breadcrumb">
-                            <li><a href="#">Home</a></li>
-                            <li class="active"><span>Categories</span></li>
+                            <li><a href="{{path('app_homepage')}}">Home</a></li>
+                            <li class="active"><span>Images</span></li>
                         </ol>
                     </div>
                 </div>
@@ -21,7 +35,7 @@
                 <div class="row">
                     {% if paginations|length ==0 %}
                         <div class="alert alert-danger" style="text-align: center;">
-                            Aucune Catégorie en Base de Données
+                            Aucune Image en Base de Données
                         </div>
                     {% else %}
                     <div class="container-fluid">
@@ -29,9 +43,9 @@
                             <div class="col-lg-12">
                                 <div class="main-box clearfix">
                                     <header class="main-box-header clearfix">
-                                        <h2>MANAGE CATEGORIE</h2>
+                                        <h2>MANAGE IMAGE</h2>
                                         <div id="reportrange" class="float-right daterange-filter">
-                                            <a href="{{path('admin_categorie_add')}}" class="table-link">
+                                            <a href="{{path('app_image_new')}}" class="table-link">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                         <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
@@ -45,26 +59,41 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
-                                                        <th>ACTIONS</th>
+                                                        <th>TRICK</th>
+                                                        <th>ISFIRST</th>
+                                                        <th>ACTIONS </th>
                                                     </tr>
                                                 </thead>
                                             <tbody>
-                                                {% for categorie in paginations%}
+                                                {% for image in paginations%}
                                                 <tr>
-                                                    <td>{{categorie.name}}</td>
                                                     <td>
-                                                        <a href="{{ path('admin_categorie_edit',{'id':categorie.id}) }}" class="table-link">
+                                                        <img src="{{ image.name}}" alt="{{'image'~image.id}}" width=50px,height=50px;>
+                                                    </td>
+                                                    <td>
+                                                        {{image.trick.name}}
+                                                    </td>
+                                                    <td>
+                                                        {% if image.isFirst == 1 %}
+                                                            YES
+                                                        {% else %}
+                                                            NO
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <a style="float:left; margin-right:0px;" href="{{path('app_image_edit',{'id':image.id})}}" class="table-link">
                                                             <span class="fa-stack">
                                                                 <i class="fa fa-square fa-stack-2x"></i>
                                                                     <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
                                                             </span>
                                                         </a>
-                                                        <a href="{{ path('admin_categorie_delete',{'id':categorie.id}) }}" class="table-link danger">
+                                                        <a style="float:left; margin-right:0px;" href="{{path('app_image_show',{'id':image.id})}}" class="table-link success mr-2">
                                                             <span class="fa-stack">
                                                                 <i class="fa fa-square fa-stack-2x"></i>
-                                                                    <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                                                    <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
                                                             </span>
                                                         </a>
+                                                        {{ include('image/_delete_form.html.twig') }}
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
@@ -78,5 +107,5 @@
                             </div>
                         </div>
                     </div>
-                    {% endif %}
+    {% endif %}
 {% endblock %}

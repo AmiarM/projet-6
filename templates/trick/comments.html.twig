@@ -21,7 +21,7 @@
           <div class="comment-widgets">
               <!-- Comment Row -->
               <div class="d-flex flex-row comment-row mt-3">
-                  <div class="p-2"><img src="{{asset('/uploads/'~comment.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                  <div class="p-2"><img src="{{comment.user.avatar}}" alt="user" width="50" class="rounded-circle"></div>
                   <div class="comment-text w-100 mb-3">
                       <h6 class="font-medium" style="font-weight:bold;">{{comment.user.firstname|upper}} {{comment.user.lastname|upper}}</h6> 
                       <p>

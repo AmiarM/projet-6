@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Créer une Catégorie{% endblock %}
+{% block title %}Edit Categorie{% endblock %}
 
 {% block admin %}
 <div class="row">
@@ -8,9 +8,9 @@
         <div id="content-header" class="clearfix">
             <div class="float-left">
                 <ol class="breadcrumb">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{{path('app_admin')}}">Home</a></li>
                     <li class="active"><span>User</span></li>
-                    <li class="active"><span>Create</span></li>
+                    <li class="active"><span>{{action}}</span></li>
                 </ol>
             </div>
         </div>
@@ -20,7 +20,7 @@
     <div class="col-lg-6">
         <div class="main-box">
             <header class="main-box-header clearfix">
-                <h2>Add Categorie</h2>
+                <h2>{{action}}</h2>
             </header>
             <div class="main-box-body clearfix">
                 {{form_start(form)}}

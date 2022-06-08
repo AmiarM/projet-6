@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use App\Entity\Categorie;
 use App\Form\CategorieType;
@@ -13,20 +13,21 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AdminCategorieController extends AbstractController
+class CategorieController extends AbstractController
 {
 
-    private $entityManagerInterface;
-    private $categorieRepository;
 
-    public function __construct(EntityManagerInterface $entityManagerInterface, CategorieRepository $categorieRepository)
+    private $categorieRepository;
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager, CategorieRepository $categorieRepository)
     {
-        $this->entityManagerInterface = $entityManagerInterface;
+        $this->manager = $manager;
         $this->categorieRepository = $categorieRepository;
     }
 
     /**
-     * @Route("admin/categories", name="admin_categories")
+     * @Route("admin/categories", name="app_categories")
      */
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
@@ -36,13 +37,13 @@ class AdminCategorieController extends AbstractController
             $request->query->getInt('page', 1), /* page number */
             10 /* limit per page */
         );
-        return $this->render('admin/categorie/index.html.twig', [
+        return $this->render('categorie/index.html.twig', [
             'paginations' => $paginations
         ]);
     }
 
     /**
-     * @Route("/admin/categorie/add", name="admin_categorie_add")
+     * @Route("/admin/categorie/add", name="app_categorie_add")
      */
     public function add(Request $request): Response
     {
@@ -51,17 +52,19 @@ class AdminCategorieController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $category = $form->getData();
-            $this->entityManagerInterface->persist($category);
-            $this->entityManagerInterface->flush();
-            return $this->redirectToRoute('admin_categories');
+            $this->manager->persist($category);
+            $this->manager->flush();
+            $this->addFlash('success', 'Categorie added successfully');
+            return $this->redirectToRoute('app_categories');
         }
-        return $this->render('admin/categorie/create.html.twig', [
-            'form' => $form->createView()
+        return $this->render('categorie/create.html.twig', [
+            'form' => $form->createView(),
+            'action' => 'Add Categorie'
         ]);
     }
 
     /**
-     * @Route("/admin/categorie/edit/{id}", name="admin_categorie_edit")
+     * @Route("/admin/categorie/edit/{id}", name="app_categorie_edit")
      */
     public function edit(Request $request, $id): Response
     {
@@ -73,18 +76,20 @@ class AdminCategorieController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $categorie = $form->getData();
-            $this->entityManagerInterface->persist($categorie);
-            $this->entityManagerInterface->flush();
-            return $this->redirectToRoute('admin_categories');
+            $this->manager->persist($categorie);
+            $this->manager->flush();
+            $this->addFlash('success', 'Categorie edited successfully');
+            return $this->redirectToRoute('app_categories');
         }
-        return $this->render('admin/categorie/edit.html.twig', [
+        return $this->render('categorie/edit.html.twig', [
             'form' => $form->createView(),
-            'categorie' => $categorie
+            'categorie' => $categorie,
+            'action' => 'Edit Categorie'
         ]);
     }
 
     /**
-     * @Route("/admin/categorie/delete/{id}", name="admin_categorie_delete")
+     * @Route("/admin/categorie/delete/{id}", name="app_categorie_delete")
      */
     public function delete($id): Response
     {
@@ -92,8 +97,9 @@ class AdminCategorieController extends AbstractController
         if (!$category) {
             throw new NotFoundHttpException("la catégorie d'id $id n'existe pas");
         }
-        $this->entityManagerInterface->remove($category);
-        $this->entityManagerInterface->flush();
-        return $this->redirectToRoute("admin_categories");
+        $this->manager->remove($category);
+        $this->manager->flush();
+        $this->addFlash('success', 'Categorie deleted successfully');
+        return $this->redirectToRoute("app_categories");
     }
 }

@@ -6,17 +6,17 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <a href="{{path('admin_users')}}" class="btn btn-primary"><i class="fa fa-list" aria-hidden="true"></i>
+            <a href="{{path('app_users')}}" class="btn btn-primary"><i class="fa fa-list" aria-hidden="true"></i>
                 USERS LISTS
             </a>
         </div>
         <div class="col-md-4">
-            <a href="{{path('admin_user_activate',{'id':user.id})}}" class="btn btn-success"><i class="fas fa-toggle-on"></i>
+            <a href="{{path('app_user_activate',{'id':user.id})}}" class="btn btn-success"><i class="fas fa-toggle-on"></i>
                Activate
             </a>
         </div>
         <div class="col-md-4">
-            <a href="{{path('admin_user_delete',{'id':user.id})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>
+            <a href="{{path('app_user_delete',{'id':user.id})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>
                 Delete
             </a>
         </div>
@@ -27,7 +27,7 @@
         <!-- Column -->
         <div class="card"> <img class="card-img-top" src="{{asset('images/show.jpg')}}" alt="Card image cap">
             <div class="card-body little-profile text-center">
-                <div class="pro-img"><img src="{{asset('/uploads/'~user.avatar)}}" alt="user"></div>
+                <div class="pro-img"><img src="{{user.avatar}}" alt="user"></div>
                 <h3 class="m-b-0">{{user.firstname|upper}}  {{user.lastname|upper}}</h3>
                 <p>Inscrit le: {{user.createdAt|date('d/m/y à H:i:s')}}</p> <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">
                     {% for role in user.roles %}
