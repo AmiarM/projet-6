@@ -33,12 +33,24 @@ class TrickController extends AbstractController
      */
     public function index(TrickRepository $trickRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $tricks = $trickRepository->findAll();
-        $paginations = $paginator->paginate(
-            $tricks, /* query NOT result */
-            $request->query->getInt('page', 1), /* page number */
-            10 /* limit per page */
-        );
+        $user = $this->getUser();
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            $tricks = $trickRepository->findAll();
+            $paginations = $paginator->paginate(
+                $tricks, /* query NOT result */
+                $request->query->getInt('page', 1), /* page number */
+                10 /* limit per page */
+            );
+        } else {
+            $tricks = $trickRepository->findBy([
+                'user' => $user
+            ]);
+            $paginations = $paginator->paginate(
+                $tricks, /* query NOT result */
+                $request->query->getInt('page', 1), /* page number */
+                10 /* limit per page */
+            );
+        }
         return $this->render('trick/index.html.twig', [
             'paginations' => $paginations
         ]);
@@ -97,7 +109,7 @@ class TrickController extends AbstractController
         $paginations = $paginator->paginate(
             $comments, /* query NOT result */
             $request->query->getInt('page', 1), /* page number */
-            10 /* limit per page */
+            3 /* limit per page */
         );
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
@@ -183,7 +195,7 @@ class TrickController extends AbstractController
         $paginations = $paginator->paginate(
             $comments, /* query NOT result */
             $request->query->getInt('page', 1), /* page number */
-            10 /* limit per page */
+            5 /* limit per page */
         );
         return $this->render('trick/comments.html.twig', [
             'trick' => $trick,

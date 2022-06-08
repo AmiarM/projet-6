@@ -4,16 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Image;
 use App\Form\ImageType;
-use App\Form\Image1Type;
-use App\Form\IsFirstType;
 use App\Repository\ImageRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 
 /**
  * @Route("/image")
@@ -25,12 +22,27 @@ class ImageController extends AbstractController
      */
     public function index(Request $request, PaginatorInterface $paginator, ImageRepository $imageRepository): Response
     {
-        $images = $imageRepository->findAll();
-        $paginations = $paginator->paginate(
-            $images, /* query NOT result */
-            $request->query->getInt('page', 1), /* page number */
-            10 /* limit per page */
-        );
+        $user = $this->getUser();
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            $images = $imageRepository->findAll();
+            $paginations = $paginator->paginate(
+                $images, /* query NOT result */
+                $request->query->getInt('page', 1), /* page number */
+                10 /* limit per page */
+            );
+        } else {
+            foreach ($user->getTricks() as $trick) {
+                $images = $imageRepository->findBy([
+                    "trick" => $trick
+                ]);
+                $paginations = $paginator->paginate(
+                    $images, /* query NOT result */
+                    $request->query->getInt('page', 1), /* page number */
+                    10 /* limit per page */
+                );
+            }
+        }
+
         return $this->render('image/index.html.twig', [
             'paginations' => $paginations
         ]);

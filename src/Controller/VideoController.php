@@ -22,12 +22,28 @@ class VideoController extends AbstractController
      */
     public function index(Request $request, PaginatorInterface $paginator, VideoRepository $videoRepository): Response
     {
-        $videos = $videoRepository->findAll();
-        $paginations = $paginator->paginate(
-            $videos, /* query NOT result */
-            $request->query->getInt('page', 1), /* page number */
-            10 /* limit per page */
-        );
+        $user = $this->getUser();
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            $videos = $videoRepository->findAll();
+            $paginations = $paginator->paginate(
+                $videos, /* query NOT result */
+                $request->query->getInt('page', 1), /* page number */
+                10 /* limit per page */
+            );
+        } else {
+            foreach ($user->getTricks() as $trick) {
+                $videos = $videoRepository->findBy([
+                    'trick' => $trick
+                ]);
+                $paginations = $paginator->paginate(
+                    $videos, /* query NOT result */
+                    $request->query->getInt('page', 1), /* page number */
+                    10 /* limit per page */
+                );
+            }
+        }
+
+
         return $this->render('video/index.html.twig', [
             'paginations' => $paginations
         ]);

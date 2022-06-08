@@ -21,23 +21,32 @@
                     </header>
                     <div class="main-box-body clearfix">
                         <div class="container">
-                        {{form_start(form)}}
+                            {{form_start(form)}}
                             {{ form_widget(form.name) }}
                             {{ form_widget(form.description)}}
                             {{ form_widget(form.categorie) }}
                             {{ form_widget(form.images) }}
 
                             <!--   Add video   -->
-                            <div id="videos" class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
-                                {{ form_widget(form.videos) }}
+                            <div style="background-color: white; padding: 10px;">
+                                <div class="form-group">
+                                        <label for="video">Video</label>
+                                    </div>
+                                        <div " id="videos" class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                            {% for video in form.videos %}
+                                               {{ form_row(video.url) }}
+                                            {% endfor %}
+                                        <div>
+                                    </div>
+                                </div>
+                                <button id="add-video" class="add-video mb-5 mt-1 btn btn-primary" type="button" data-collection-holder-class="videos">Add a video</button>
+                                <input type="hidden" id="video-counter" value="0">
                             </div>
-                            <button id="add-video" class="add-video" type="button" data-collection-holder-class="videos">Add a video</button>
-                            <input type="hidden" id="video-counter" value="0">
                             <hr>
                             {{ form_widget(form.submit)}}
-                    </div>
+                        </div>
                         {{form_end(form)}}
-            </div>
+                    </div>
                     {% if app.request.attributes.get('_route') == "app_trick_edit" %}
                                 <h2>Images</h2>
                                 <hr>
@@ -69,4 +78,5 @@
                 <img src="{{asset('images/bannierre.jpg')}}" alt="" width="600px" height="510px">
             <div>
         </div>
+    </div>
 </div>

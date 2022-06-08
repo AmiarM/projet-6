@@ -22,7 +22,7 @@
 								<h2> {{app.user.lastname|upper}} {{app.user.firstname|slice(0,1)|upper}}</h2>
 							</header>
 							<div class="main-box-body clearfix">
-                                <img src="{{asset('/uploads/' ~ app.user.avatar)}}" alt="" class="profile-img img-fluid d-block mx-auto">
+                                <img src="{{ app.user.avatar}}" alt="" class="profile-img img-fluid d-block mx-auto">
 								<div class="profile-label">
 									<span class="badge badge-danger">
 									{% for role in app.user.roles %}
@@ -52,7 +52,7 @@
 											<div class="story">
 												<div class="story-user">
 													<a href="#">
-                                                        <img alt="" src="{{asset('/uploads/' ~ app.user.avatar)}}"/>
+                                                        <img alt="" src="{{app.user.avatar}}"/>
 													</a>
 												</div>
 												<div class="story-content">

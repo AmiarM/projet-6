@@ -27,7 +27,7 @@
         <!-- Column -->
         <div class="card"> <img class="card-img-top" src="{{asset('images/show.jpg')}}" alt="Card image cap">
             <div class="card-body little-profile text-center">
-                <div class="pro-img"><img src="{{asset('/uploads/'~user.avatar)}}" alt="user"></div>
+                <div class="pro-img"><img src="{{user.avatar}}" alt="user"></div>
                 <h3 class="m-b-0">{{user.firstname|upper}}  {{user.lastname|upper}}</h3>
                 <p>Inscrit le: {{user.createdAt|date('d/m/y à H:i:s')}}</p> <a href="javascript:void(0)" class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">
                     {% for role in user.roles %}

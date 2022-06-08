@@ -4,46 +4,41 @@
 {% endblock %}
 {% block body %}
 <!-- Header -->
-<header class="masthead" style="height: 50vh;
+<header class="masthead" style="height: 960px;
+{% set noFirst = 1 %}
   {% for image in trick.images %}
     {% if image is  not defined %}
       <div class="alert alert-danger">
         Aucune Image
       </div>
     {% else %}
-      {% if image.isFirst == 1 %}
-        background: url({{asset('/uploads/'~image.name)}});background-repeat: no-repeat;background-size: cover; height:960px;
+      {% if image.isFirst == 0 %}
+      {% set noFirst = 0 %}
+        background: url({{image.name}});background-repeat: no-repeat;background-size: cover; height:960; alt="{{image.name}}">
         <header style="padding-top:200px;">
           <div class="container d-flex h-100 align-items-center">
             <div class="mx-auto text-center">
               <h1 class="text-uppercase mx-auto my-0">{{trick.name}}</h1>
             </div>
           </div>
-          <div style="margin-top:-850px; margin-left:1450px">
-            <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
-            <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
+          <div style="margin-top:-850px; margin-left:1450px; display:flex;">
+            <a  href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
+            <a style="margin-left:3px;" href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
           </div>
         </header>
       {% endif %}
     {% endif %}
   {% endfor %}
-
-
-  <!---video -->
-  {% if trick.videos is  not defined %}
-      <div class="alert alert-danger">
-        Aucune video
+  {% if noFirst %}
+  background: url({{asset('images/bannierre.jpg')}});background-repeat: no-repeat;background-size: cover; height:960px;>
+  <header style="padding-top:200px;">
+    <div class="container d-flex h-100 align-items-center">
+      <div class="mx-auto text-center">
+        <h1 class="text-uppercase mx-auto my-0">Default Image</h1>
       </div>
-  {% else %}
-    {% for video in trick.videos %}
-    <div class="col-md-3" style="margin-right:5px;">
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="{{video.url}}" width=150px; height=150px;></iframe>
-        </div>
-        <a href="{{ path('app_video_delete', {id: video.id})}}" data-delete data-token="{{ csrf_token('delete' ~ video.id )}}" class="btn btn-danger mt-1">Delete</a>
     </div>
-    {% endfor %}
-    {% endif %}
+  </header>
+  {% endif %}
 <!-- Trick Section -->
 <section id="tricks" class="projects-section bg-light">
   <div class="container" >
@@ -61,7 +56,7 @@
                   {% else %}
                     {% if image.isFirst == 0 %}
                       <div class="col-md-4 trickimages">
-                            <img class="img-fluid" src="{{asset('/uploads/' ~ image.name)}}" />
+                            <img class="img-fluid" src="{{image.name}}" />
                         <hr>
                         <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
                         <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
@@ -72,7 +67,23 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="row"></div>
+            <div class="row">
+              <!---video -->
+  {% if trick.videos is  not defined %}
+      <div class="alert alert-danger">
+        Aucune video
+      </div>
+  {% else %}
+    {% for video in trick.videos %}
+    <div class="col-md-4 trickimages">
+      <iframe width="150" height="150" class="embed-responsive-item" src="{{video.url}}"></iframe>
+      <hr>
+      <a href="{{ path('app_video_delete', {id: video.id})}}" data-delete data-token="{{ csrf_token('delete' ~ video.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
+      <a href="{{path('app_video_edit',{'id':video.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
+    </div>
+    {% endfor %}
+    {% endif %}
+            </div>
           </div>
         </div>
         <div class="row seeMedia">
@@ -170,7 +181,7 @@
           <div class="row post-comment" id="comments">
             <a name="comment_3"></a>
             <h4 class="col-sm-3 commentnotes" box-card>
-              <img src="{{asset('/uploads/'~comment.user.avatar)}}" class="img-fluid  img-thumbnail avatar" width="50px" height="50px"/>
+              <img src="{{comment.user.avatar}}" class="img-fluid  img-thumbnail avatar" width="50px" height="50px"/>
               <strong>{{comment.user.firstname}} {{comment.user.lastname}}</strong><br/> publié le<br /><strong>{{comment.createdAt| date('d/m/Y à H:i:s')}}</strong>
             </h4>
             <div class="col-sm-9">
@@ -180,11 +191,9 @@
           {% endif %}
         {% endfor %}
         {% endif %}
-        <button class="btn btn-success" href="#" id="loadMore">Voir plus</button>
-        <a href="#comments" class="js-scroll-trigger">
-          <i class="fa fa-arrow-up fa-2x"></i>
-        </a>
-    
+        <div class="navigation">
+          {{ knp_pagination_render(paginations) }}
+        </div>
         <br>
         <hr>
         <div class="form-comments" id="reply">

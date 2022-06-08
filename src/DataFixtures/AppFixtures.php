@@ -4,9 +4,12 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\User;
-use App\Entity\Trick;
-use App\Entity\Categorie;
 use App\Entity\Image;
+use App\Entity\Trick;
+use App\Entity\Video;
+use App\Entity\Comment;
+use App\Entity\Categorie;
+use Faker\Provider\Youtube;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -25,43 +28,61 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
+        $faker->addProvider(new Youtube($faker));
         $admin = new User();
         $admin->setFirstname("admin")
             ->setLastname("admin")
             ->setPassword($this->hasher->hashPassword($admin, "password"))
             ->setRoles(['ROLE_ADMIN'])
             ->setEmail('admin@admin.com')
-            ->setAvatar('avatar');
+            ->setActivated(1)
+            ->setAvatar($faker->imageUrl());
         $manager->persist($admin);
+        for ($u = 0; $u < 5; $u++) {
+            $user = new User();
+            $user->setFirstname($faker->firstName())
+                ->setLastname($faker->lastName())
+                ->setPassword($this->hasher->hashPassword($user, "password"))
+                ->setEmail($faker->email())
+                ->setActivated(1)
+                ->setAvatar($faker->imageUrl());
+
+            $manager->persist($user);
+        }
         for ($c = 0; $c < 10; $c++) {
             $categorie = new Categorie();
-            $categorie->setName($faker->sentence(1));
+            $categorie->setName($faker->word(2));
             $manager->persist($categorie);
-            for ($u = 0; $u < 5; $u++) {
-                $user = new User();
-
-
-                $user->setFirstname($faker->firstName())
-                    ->setLastname($faker->lastName())
-                    ->setPassword($this->hasher->hashPassword($user, "password"))
-                    ->setEmail($faker->email())
-                    ->setAvatar('avatar');
-
-                $manager->persist($user);
+            for ($co = 0; $co < 10; $co++) {
                 for ($t = 0; $t < 10; $t++) {
                     $trick = new Trick($faker->sentence(1));
 
-                    $trick->setName($faker->sentence(1))
-                        ->setDescription($faker->paragraph(1))
-                        ->setSlug(strtolower($this->slugger->slug($trick->getName())))
+                    $trick->setName($faker->word(1))
+                        ->setDescription($faker->paragraph())
                         ->setCategorie($categorie)
-                        ->setUser($user);
+                        ->setUser($user)
+                        ->setActivated(1);
                     $manager->persist($trick);
                     $image = new Image();
                     for ($i = 0; $i < 10; $i++) {
                         $image->setName($faker->imageUrl(400, 400, true))
                             ->setTrick($trick);
                         $manager->persist($image);
+                    }
+                    $video = new Video();
+                    for ($v = 0; $v < 10; $v++) {
+                        $video->setUrl($faker->youtubeRandomUri())
+                            //$video->setUrl("https://www.youtube.com/watch?v=SG7GgcnR1F4&t=2199s")
+                            ->setTrick($trick);
+                        $manager->persist($video);
+                    }
+                    for ($co = 0; $co < 10; $co++) {
+                        $comment = new Comment();
+                        $comment->setContent($faker->sentence(1))
+                            ->setActivated(1)
+                            ->setTrick($trick)
+                            ->setUser($user);
+                        $manager->persist($comment);
                     }
                 }
             }
