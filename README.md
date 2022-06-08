@@ -1,4 +1,5 @@
-# projet-6
+# SnowTricks
+Snow Trick est un site collaboratif à destination des passionnés du snowboard. Son objectif faire connaître ce sport auprès du grand public et aider à l'apprentissage des figures (tricks).
 
 # Création de la base de données 
 symfony console doctrine:database:create
