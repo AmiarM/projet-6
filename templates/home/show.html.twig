@@ -99,26 +99,32 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Photos Et Vidéos démonstratives</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         {% for image in trick.images %}
-                                            {% if image.isFirst == 0 %}
-                                                <div class="col-md-2 col-xs-12 box-card">
-                                                    <div class="md-12 trickcard">
-                                                        <img src="{{asset('/uploads/' ~ image.name)}}" class="img-fluid trick"/>
-                                                        <hr>
-                                                        <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary">
-                                                        </a>
-                                                        <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger">
-                                                            Delete
-                                                        </a>
-                                                    </div>
+                                            <div class="col-md-2 col-xs-12 box-card">
+                                                <div class="md-12 trickcard">
+                                                    <img src="{{image.name}}" class="img-fluid trick" alt="{{image.name}}"/>
+                                                    <hr>
+                                                    <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary">
+                                                    </a>
+                                                    <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger">
+                                                        Delete
+                                                    </a>
                                                 </div>
-                                            {% endif  %}
+                                            </div>
+                                        {% endfor %}
+                                        {% for video in trick.videos %}
+                                            <div class="md-12 trickcard">
+                                                <iframe width="150" height="150" class="embed-responsive-item" src="{{video.url}}"></iframe>
+                                                <hr>
+                                                <a href="{{ path('app_video_delete', {id: video.id})}}" data-delete data-token="{{ csrf_token('delete' ~ video.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
+                                                <a href="{{path('app_video_edit',{'id':video.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
+                                            </div>
                                         {% endfor %}
                                     </div>
                                     <div class="modal-footer">

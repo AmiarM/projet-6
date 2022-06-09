@@ -7,7 +7,7 @@
 
     {{ include('image/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_image_index') }}" class="btn btn-success" style="float:left; margin-right:5px;">back to list</a>
+    <a href="{{ path('app_image_index') }}" class="btn btn-success btn-sm" style="float:left; margin-right:5px;"><i class="fa fa-arrow-left"></i></a>
 
     {{ include('image/_delete_form.html.twig') }}
 {% endblock %}

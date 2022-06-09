@@ -30,12 +30,9 @@
                             <!--   Add video   -->
                             <div style="background-color: white; padding: 10px;">
                                 <div class="form-group">
-                                        <label for="video">Video</label>
                                     </div>
                                         <div " id="videos" class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
-                                            {% for video in form.videos %}
-                                               {{ form_row(video.url) }}
-                                            {% endfor %}
+                                               {{ form_row(form.videos) }}
                                         <div>
                                     </div>
                                 </div>
@@ -53,7 +50,7 @@
                                 <div class="row">
                                     {% for image in trick.images %}
                                     <div class="col-md-3" style="margin-right:5px;">
-                                        <img src="{{asset('/uploads/' ~ image.name)}}" class="rounded mx-auto d-block" width="150px; height=150px">
+                                        <img src="{{image.name}}" class="rounded mx-auto d-block" width="150px; height=150px">
                                         {# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
                                         <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger mt-1">Delete</a>
                                     </div>
