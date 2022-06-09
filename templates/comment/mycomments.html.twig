@@ -36,7 +36,7 @@
                                         <th><a href="#" class="desc"><span>TRICK</span></a></th>
                                         <th><a href="#" class="desc"><span>USER</span></a></th>
                                         <th><a href="#" class="desc"><span>CREATEDAT</span></a></th>
-										<th><a href="#" class="desc"><span>ACTIVATED</span></a></th>
+                                        <th><a href="#" class="desc"><span>ACTIVATED</span></a></th>
                                         <th><a href="#" class="desc"><span>Actions</span></a></th>
                                     </tr>
                                 </thead>
@@ -44,27 +44,27 @@
                                     {% for comment in app.user.comments %}
                                         <tr>
                                             <td>
-												{{ comment.id }}
+                                                {{ comment.id }}
                                             </td>
                                             <td>
                                                 {{ comment.content }}
                                             </td>
-											  <td>
+                                            <td>
                                                 {{ comment.trick.name }}
                                             </td>
                                             <td>
                                                 {{ comment.user.email }}
                                             </td>
-											  <td>
+                                            <td>
                                                 {{ comment.createdAt|date('d/m/y') }}
                                             </td>
-											  <td>
+                                            <td>
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary" 
-                                                    {% if comment.activated == 0 %} 
-                                                    <span class="badge badge-danger" style="float:left;">Inactive</span> 
+                                                           {% if comment.activated == 0 %} 
+                                                               <span class="badge badge-danger" style="float:left;">Inactive</span> 
                                                     {% else %}
-                                                    <span class="badge badge-success" style="float:left;">Active</span>
+                                                        <span class="badge badge-success" style="float:left;">Active</span>
                                                     {% endif %}
                                                 </div>
                                             </td>
@@ -83,13 +83,13 @@
                                                 </a>
                                             </td>
                                         </tr>
-									{%else%}
-									    <tr>
-											<td colspan="7">
-												<div class="alert alert-danger">
-													no records found
-												</div>
-											</td>
+                                    {%else%}
+                                        <tr>
+                                            <td colspan="7">
+                                                <div class="alert alert-danger">
+                                                    no records found
+                                                </div>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

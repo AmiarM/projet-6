@@ -2,64 +2,63 @@
 {% block title %}
 {% endblock %}
 {% block body %}
-{% include 'shared/_bannierre.html.twig' %}
-<section id="tricks" style="background-image: linear-gradient(to top, #a3bded 0%, #fff 100%);" class="projects-section bg-light">
-    <div class="container-fluid" >
-        <div class="col-md-12 text-center"></div>
-        <div class="row justify-content-md-center" id="list">
-            {% for trick  in tricks %}
-            <div class="col-md-2 col-xs-12 box-card">
-                <a href="{{path('app_home_show',{'id':trick.id,'slug':trick.slug})}}">
-                    <div class="md-12 trickcard">
-                        {% set noFirst = 1 %}
-                        {% for image in trick.images %}
-                            {% if image.isFirst == 0 %}
-                                {% set noFirst=0 %}
-                                <img src="{{image.name}}" class="img-fluid trick" alt="{{image.name}}"/>
-                            {% endif %}
-                        {% endfor %}
-                        {% if noFirst %}
-                        <img src="{{asset('images/bannierre.jpg')}}" class="img-fluid trick"/>
-                        {% endif %}
-                        <hr>
-                        <span>{{trick.name|upper}}</span>
+    {% include 'shared/_bannierre.html.twig' %}
+    <section id="tricks" style="background-image: linear-gradient(to top, #a3bded 0%, #fff 100%);" class="projects-section bg-light">
+        <div class="container-fluid" >
+            <div class="col-md-12 text-center"></div>
+            <div class="row justify-content-md-center" id="list">
+                {% for trick  in tricks %}
+                    <div class="col-md-2 col-xs-12 box-card">
+                        <a href="{{path('app_home_show',{'id':trick.id,'slug':trick.slug})}}">
+                            <div class="md-12 trickcard">
+                                {% set noFirst = 1 %}
+                                {% for image in trick.images %}
+                                    {% if image.isFirst == 0 %}
+                                        {% set noFirst=0 %}
+                                        <img src="{{image.name}}" class="img-fluid trick" alt="{{image.name}}"/>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if noFirst %}
+                                    <img src="{{asset('images/bannierre.jpg')}}" class="img-fluid trick"/>
+                                {% endif %}
+                                <hr>
+                                <span>{{trick.name|upper}}</span>
+                            </div>
+                        </a>
                     </div>
-                </a>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        <button class="btn btn-success" href="#" id="loadMore">Voir plus</button>
-        <a href="#tricks" class="js-scroll-trigger">
-            <i class="fa fa-arrow-up fa-2x"></i>
-        </a>
-    <div>
-</section>
+            <button class="btn btn-success" href="#" id="loadMore">Voir plus</button>
+            <a href="#tricks" class="js-scroll-trigger">
+                <i class="fa fa-arrow-up fa-2x"></i>
+            </a>
+    </section>
 {% endblock %}
 {% block javascript %}
-<script>
-    $(function () {
-        $(".box-card").slice(0, 10).show();
-        $("#loadMore").on('click', function (e) {
-            e.preventDefault();
-            $(".fa-arrow-up:hidden").slideDown();
-            $(".box-card:hidden").slice(0, 5).slideDown();
-            if ($(".box-card:hidden").length == 0) {
-                $("#load").fadeOut('slow');
-            }
-            $('html,body').animate({
-                scrollTop: $(this).offset().top
-            }, 1500);
+    <script>
+        $(function () {
+            $(".box-card").slice(0, 10).show();
+            $("#loadMore").on('click', function (e) {
+                e.preventDefault();
+                $(".fa-arrow-up:hidden").slideDown();
+                $(".box-card:hidden").slice(0, 5).slideDown();
+                if ($(".box-card:hidden").length == 0) {
+                    $("#load").fadeOut('slow');
+                }
+                $('html,body').animate({
+                    scrollTop: $(this).offset().top
+                }, 1500);
+            });
         });
-    });
-</script>
-<script>
-    $("[data-toggle='confirmation']").popConfirm({
-        title: "Supprimer ce trick ?", // The title of the confirm
-        //content: "I have warned you !", // The message of the confirm
-        placement: "bottom", // The placement of the confirm (Top, Right, Bottom, Left)
-        container: "body", // The html container
-        yesBtn: "Supprimer",
-        noBtn: "Annuler"
-    });
-</script>
+    </script>
+    <script>
+        $("[data-toggle='confirmation']").popConfirm({
+            title: "Supprimer ce trick ?", // The title of the confirm
+            //content: "I have warned you !", // The message of the confirm
+            placement: "bottom", // The placement of the confirm (Top, Right, Bottom, Left)
+            container: "body", // The html container
+            yesBtn: "Supprimer",
+            noBtn: "Annuler"
+        });
+    </script>
 {% endblock %}

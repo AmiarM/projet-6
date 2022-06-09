@@ -35,7 +35,7 @@ class CategorieController extends AbstractController
         $paginations = $paginator->paginate(
             $categories, /* query NOT result */
             $request->query->getInt('page', 1), /* page number */
-            10 /* limit per page */
+            9 /* limit per page */
         );
         return $this->render('categorie/index.html.twig', [
             'paginations' => $paginations

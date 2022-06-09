@@ -1,252 +1,239 @@
+
 {% extends 'base.html.twig' %}
 {% block stylesheet %}
-  <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"> 
+    <link type="text/css"  rel="stylesheet" href="{{asset("css/loadmore.css")}}">
+    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"> 
 {% endblock %}
 {% block body %}
-<!-- Header -->
-<header class="masthead" style="height: 960px;
-{% set noFirst = 1 %}
-  {% for image in trick.images %}
-    {% if image is  not defined %}
-      <div class="alert alert-danger">
-        Aucune Image
-      </div>
-    {% else %}
-      {% if image.isFirst == 0 %}
-      {% set noFirst = 0 %}
-        background: url({{image.name}});background-repeat: no-repeat;background-size: cover; height:960; alt="{{image.name}}">
+    <!-- Header -->
+    <header class="masthead" style="height: 960px;
+            {% set noFirst = 1 %}
+            {% for image in trick.images %}
+                {% if image is  not defined %}
+                    <div class="alert alert-danger">
+                    Aucune Image
+                </div>
+            {% else %}
+                {% if image.isFirst == 0 %}
+                    {% set noFirst = 0 %}
+                    background: url({{image.name}});background-repeat: no-repeat;background-size: cover; height:960; alt="{{image.name}}">
+                    <header style="padding-top:200px;">
+                        <div class="container d-flex h-100 align-items-center">
+                            <div class="mx-auto text-center">
+                                <h1 class="text-uppercase mx-auto my-0">{{trick.name}}</h1>
+                            </div>
+                        </div>
+                        <div style="margin-top:-850px; margin-left:1450px; display:flex;">
+                            <a  href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
+                            <a style="margin-left:3px;" href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
+                        </div>
+                    </header>
+                {% endif %}
+            {% endif %}
+    {% endfor %}
+    {% if noFirst %}
+        background: url({{asset('images/bannierre.jpg')}});background-repeat: no-repeat;background-size: cover; height:960px;>
         <header style="padding-top:200px;">
-          <div class="container d-flex h-100 align-items-center">
-            <div class="mx-auto text-center">
-              <h1 class="text-uppercase mx-auto my-0">{{trick.name}}</h1>
+            <div class="container d-flex h-100 align-items-center">
+                <div class="mx-auto text-center">
+                    <h1 class="text-uppercase mx-auto my-0">Default Image</h1>
+                </div>
             </div>
-          </div>
-          <div style="margin-top:-850px; margin-left:1450px; display:flex;">
-            <a  href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
-            <a style="margin-left:3px;" href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
-          </div>
         </header>
-      {% endif %}
     {% endif %}
-  {% endfor %}
-  {% if noFirst %}
-  background: url({{asset('images/bannierre.jpg')}});background-repeat: no-repeat;background-size: cover; height:960px;>
-  <header style="padding-top:200px;">
-    <div class="container d-flex h-100 align-items-center">
-      <div class="mx-auto text-center">
-        <h1 class="text-uppercase mx-auto my-0">Default Image</h1>
-      </div>
-    </div>
-  </header>
-  {% endif %}
+</header>
 <!-- Trick Section -->
 <section id="tricks" class="projects-section bg-light">
-  <div class="container" >
-    <div class="row justify-content-md-center">
-      <div class="col-md-12 text-center">
-        <div class="row justify-content-md-center"></div>
-        <div class="row justify-content-md-center" id="media">
-          <div class="col-md-6">
-            <div class="row">
-                {% for image in trick.images %}
-                  {% if image  is not defined %}
-                  <div class="alert alert-danger">
-                    Aucune Images
-                  <div>
-                  {% else %}
-                    {% if image.isFirst == 0 %}
-                      <div class="col-md-4 trickimages">
-                            <img class="img-fluid" src="{{image.name}}" />
+    <div class="container" >
+        <div class="row justify-content-md-center">
+            <div class="col-md-12 text-center">
+                <div class="row justify-content-md-center"></div>
+                <div class="row justify-content-md-center" id="media">
+                    <div class="col-md-6">
+                        <div class="row">
+                            {% for image in trick.images %}
+                                {% if image  is not defined %}
+                                    <div class="alert alert-danger">
+                                        Aucune Images
+                                        <div>
+                                        {% else %}
+                                            {% if image.isFirst == 0 %}
+                                                <div class="col-md-4 trickimages">
+                                                    <img class="img-fluid" src="{{image.name}}" />
+                                                    <hr>
+                                                    <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
+                                                    <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
+                                                </div>
+                                            {% endif  %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <!---video -->
+                                    {% if trick.videos is  not defined %}
+                                        <div class="alert alert-danger">
+                                            Aucune video
+                                        </div>
+                                    {% else %}
+                                        {% for video in trick.videos %}
+                                            <div class="col-md-4 trickimages">
+                                                <iframe width="150" height="150" class="embed-responsive-item" src="{{video.url}}"></iframe>
+                                                <hr>
+                                                <a href="{{ path('app_video_delete', {id: video.id})}}" data-delete data-token="{{ csrf_token('delete' ~ video.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
+                                                <a href="{{path('app_video_edit',{'id':video.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row seeMedia">
+                            <div class="mx-auto">
+                                <button data-toggle="modal" data-target="#exampleModal" id="seeMedia" class="btn btn-primary">Voir les médias</button>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% for image in trick.images %}
+                                            {% if image.isFirst == 0 %}
+                                                <div class="col-md-2 col-xs-12 box-card">
+                                                    <div class="md-12 trickcard">
+                                                        <img src="{{asset('/uploads/' ~ image.name)}}" class="img-fluid trick"/>
+                                                        <hr>
+                                                        <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary">
+                                                        </a>
+                                                        <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger">
+                                                            Delete
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endif  %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr>
-                        <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
-                        <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
-                      </div>
-                    {% endif  %}
-                  {% endif %}
-                {% endfor %}
+                        <p>{{trick.description}}</p>
+                        <hr>
+                        <p><span class="btn btn-info">Catégorie: {{trick.categorie.name}}</span></p>
+                        <hr>
+                        <span class=" justify-content-md-center">
+                            <span class="btn btn-info"><i class="fa fa-calendar"></i>  publié le {{trick.createdAt | date('d/m/Y à H:i:s')}}</span>
+                        </span>
+                        <span class="btn btn-info justify-content-md-center"><i class="fa fa-user"></i> Auteur: {{trick.user.firstname}} {{trick.user.lastname}}</span>
+                        <hr>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="row">
-              <!---video -->
-  {% if trick.videos is  not defined %}
-      <div class="alert alert-danger">
-        Aucune video
-      </div>
-  {% else %}
-    {% for video in trick.videos %}
-    <div class="col-md-4 trickimages">
-      <iframe width="150" height="150" class="embed-responsive-item" src="{{video.url}}"></iframe>
-      <hr>
-      <a href="{{ path('app_video_delete', {id: video.id})}}" data-delete data-token="{{ csrf_token('delete' ~ video.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
-      <a href="{{path('app_video_edit',{'id':video.id})}}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-edit" aria-hidden="true"></i></i></a>
+        </div>
     </div>
-    {% endfor %}
-    {% endif %}
-            </div>
-          </div>
-        </div>
-        <div class="row seeMedia">
-          <div class="mx-auto">
-            <button data-toggle="modal" data-target="#exampleModal" id="seeMedia" class="btn btn-primary">Voir les médias</button>
-          </div>
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                {% for image in trick.images %}
-                {% if image.isFirst == 0 %}
-                <div class="col-md-2 col-xs-12 box-card">
-                      <div class="md-12 trickcard">
-                          <img src="{{asset('/uploads/' ~ image.name)}}" class="img-fluid trick"/>
-                          <hr>
-                          <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary">
-                          </a>
-                          <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger">
-                              Delete
-                          </a>
-                          </div>
-                      </div>
-                    {% endif  %}
-                {% endfor %}
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr>
-        <p>{{trick.description}}</p>
-        <hr>
-        <p><span class="btn btn-info">Catégorie: {{trick.categorie.name}}</span></p>
-        <hr>
-        <span class=" justify-content-md-center">
-          <span class="btn btn-info"><i class="fa fa-calendar"></i>  publié le {{trick.createdAt | date('d/m/Y à H:i:s')}}</span>
-        </span>
-        <span class="btn btn-info justify-content-md-center"><i class="fa fa-user"></i> Auteur: {{trick.user.firstname}} {{trick.user.lastname}}</span>
-        <hr>
-      </div>
-    </div>
-  </div>
 </section>
 <!-- Comments Section -->
 <section id="comments">
-  <div class="container commentaires">
-    <div class="row justify-content-md-center">
-      {% if app.user  is not defined%}
-      <div class="col-md-8 col-sm-12">
-        <div id="post-add-comment" class="well">
-          <div class="form-card text-center">
-            <a class="btn btn-success btnlogin2" href="/connexion">
-                <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Connectez-vous
-            </a>
-            pour publier un message<br>
-          </div>
-        </div>
-      </div>
-      {% endif %}
-      <div class="col-sm-8 commentaires2">
-        <h3>
-          <i class="fa fa-comments" aria-hidden="true"></i>{{trick.comments | length}}
-            commentaire
-        </h3>
-        <hr>
-        {% if trick.comments | length == 0%}
-        <div class="post-comment">
-					<p>Il n'y a aucun commentaire pour l'instant.</p>
-				</div>
-        {% else %}
-        {% for comment in trick.comments %}
-          {% if comment.activated == 1%}
-          <div class="col-md-2 col-xs-12 box-card">
-            <a href="{{path('app_home_show',{'id':trick.id,'slug':trick.slug})}}">
-                <div class="md-12 trickcard">
-                    <img src="{{asset('images/bannierre.jpg')}}" class="img-fluid trick"/>
-                    <hr>
-                    <span>{{trick.name|upper}}</span>
+    <div class="container commentaires">
+        <div class="row justify-content-md-center">
+            {% if app.user  is not defined%}
+                <div class="col-md-8 col-sm-12">
+                    <div id="post-add-comment" class="well">
+                        <div class="form-card text-center">
+                            <a class="btn btn-success btnlogin2" href="/connexion">
+                                <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Connectez-vous
+                            </a>
+                            pour publier un message<br>
+                        </div>
+                    </div>
                 </div>
-            </a>
-        </div>
+            {% endif %}
+            <div class="col-sm-8 commentaires2">
+                <h3>
+                    <i class="fa fa-comments" aria-hidden="true"></i>{{trick.comments | length}}
+                    commentaire
+                </h3>
+                <hr>
+                {% if trick.comments | length == 0%}
+                    <div class="post-comment">
+                        <p>Il n'y a aucun commentaire pour l'instant.</p>
+                    </div>
+                {% else %}
+                    {% for comment in trick.comments %}
+                        {% if comment.activated == 1%}
 
-
-          <div class="row post-comment" id="comments">
-            <a name="comment_3"></a>
-            <h4 class="col-sm-3 commentnotes" box-card>
-              <img src="{{comment.user.avatar}}" class="img-fluid  img-thumbnail avatar" width="50px" height="50px"/>
-              <strong>{{comment.user.firstname}} {{comment.user.lastname}}</strong><br/> publié le<br /><strong>{{comment.createdAt| date('d/m/Y à H:i:s')}}</strong>
-            </h4>
-            <div class="col-sm-9">
-             {{comment.content}}
-            </div>
-          </div>
-          {% endif %}
-        {% endfor %}
-        {% endif %}
-        <div class="navigation">
-          {{ knp_pagination_render(paginations) }}
-        </div>
-        <br>
-        <hr>
-        <div class="form-comments" id="reply">
-          <div class="title-box-2">
-            <h3 class="title-left">
-              Leave a Comment  
-            </h3>
-          </div>
-          {{form_start(form)}}
-            <div class="row">
-              <div class="col-md-12 mb-3">
-                <div class="form-group">
-                  {{form_row(form.content)}}
+                            <div class="container">
+                                <div class="flex">
+                                    <div class="content">
+                                        <div class="row post-comment" id="comments">
+                                            <a name="comment_3"></a>
+                                            <h4 class="col-sm-3 commentnotes" box-card>
+                                                <img src="{{comment.user.avatar}}" class="img-fluid  img-thumbnail avatar" width="50px" height="50px"/>
+                                                <strong>{{comment.user.firstname}} {{comment.user.lastname}}</strong><br/> publié le<br /><strong>{{comment.createdAt| date('d/m/Y à H:i:s')}}</strong>
+                                            </h4>
+                                            <div class="col-sm-9">
+                                                <p>
+                                                    {{comment.content}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <a href="#" id="loadMore">Load More</a>
+                <br>
+                <hr>
+                <div class="form-comments" id="reply">
+                    <div class="title-box-2">
+                        <h3 class="title-left">
+                            Leave a Comment  
+                        </h3>
+                    </div>
+                    {{form_start(form)}}
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                {{form_row(form.content)}}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            {{form_row(form.submit)}}
+                        </div>
+                    </div>
+                    {{form_end(form)}}
                 </div>
-              </div>
-              <div class="col-md-12">
-                {{form_row(form.submit)}}
-              </div>
             </div>
-            {{form_end(form)}}
         </div>
-      </div>
     </div>
-  </div>
-  
 </section>
 {% endblock %}
 {% block javascript %}
     <script src="{{ asset('js/delete.js') }}"></script>
     <script>
-      $(function () {
-          $(".post-comment").slice(0, 1).show();
-          $("#loadMore").on('click', function (e) {
+        $(document).ready(function(){
+            $(".content").slice(0, 4).show();
+            $("#loadMore").on("click", function(e){
               e.preventDefault();
-              $(".fa-arrow-up:hidden").slideDown();
-              $(".post-comment:hidden").slice(0, 1).slideDown();
-              if ($(".post-comment:hidden").length == 0) {
-                  $("#load").fadeOut('slow');
+              $(".content:hidden").slice(0, 4).slideDown();
+              if($(".content:hidden").length == 0) {
+                $("#loadMore").text("No Content").addClass("noContent");
               }
-              $('html,body').animate({
-                  scrollTop: $(this).offset().top
-              }, 1500);
-          });
-      });
-  </script>
-  <script>
-      $("[data-toggle='confirmation']").popConfirm({
-          title: "Supprimer ce trick ?", // The title of the confirm
-          //content: "I have warned you !", // The message of the confirm
-          placement: "bottom", // The placement of the confirm (Top, Right, Bottom, Left)
-          container: "body", // The html container
-          yesBtn: "Supprimer",
-          noBtn: "Annuler"
-      });
-  </script>
+            });
+            
+          })
+    </script>
 {% endblock %}
