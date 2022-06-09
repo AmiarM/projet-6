@@ -1,66 +1,67 @@
+
 {% extends 'layout.html.twig' %}
 
 {% block title %}Comment{% endblock %}
 {% block stylesheet %}
-<link href="{{asset('css/commentShow.css')}}" rel="stylesheet" type="text/css"> 
+    <link href="{{asset('css/commentShow.css')}}" rel="stylesheet" type="text/css"> 
 {% endblock %}
 {% block admin %}
-<div class="container mt-5 mb-5">
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-10">
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="images p-3">
-                            {% for image in comment.trick.images%}
-                             {%if image.isFirst == 1%}
-                                <div class="text-center p-4"> <img id="main-image" src="{{asset('/uploads/'~ image.name)}}" width="500"  class="img-thumbnail"/> </div>
-                            {%else%}
-                            <div class="thumbnail text-center"> 
-                                <img onclick="change_image(this)" src="{{asset('/uploads/'~ image.name)}}" width="70" style="float:left; margin-right:10px;" class="img-thumbnail"> 
-                            </div>
-                             {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="product p-4">
-                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{comment.trick.name}}</span>
-                                <hr>
-                                <h5 class="text-uppercase">{{comment.trick.description|slice(1,20)}}</h5>
-                                <hr>
-                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">Posté par:</span>
-                                    <div class="ml-2"> <span>{{comment.user.firstname|upper}} {{comment.user.lastname|upper}}</span> </div>
-                                    <hr>
-                                    <img alt="" src="{{asset('/uploads/' ~ comment.user.avatar)}}" class="img-thumbnail" style="width=50px;height:50px"/>
-                                </div>
-                                <hr>
-                            </div>
-                            <p class="about">{{comment.content}}</p>
-                            <div class="sizes mt-5">
-                                <h6 class="text-uppercase">Posté le:</h6> <label class="radio"> {{comment.createdAt|date('d/m/y à H:i:s')}} </label>
-                            </div>
-                            <hr>
-                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary" 
-                                    {% if comment.activated == 0 %} 
-                                    <span class="badge badge-danger" style="float:left;">Inactive</span> 
-                                    {% else %}
-                                    <span class="badge badge-success" style="float:left;">Active</span>
+    <div class="container mt-5 mb-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="images p-3">
+                                {% for image in comment.trick.images%}
+                                    {%if image.isFirst == 1%}
+                                        <div class="text-center p-4"> <img id="main-image" src="{{asset('/uploads/'~ image.name)}}" width="500"  class="img-thumbnail"/> </div>
+                                        {%else%}
+                                        <div class="thumbnail text-center"> 
+                                            <img onclick="change_image(this)" src="{{asset('/uploads/'~ image.name)}}" width="70" style="float:left; margin-right:10px;" class="img-thumbnail"> 
+                                        </div>
                                     {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="product p-4">
+                                <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{comment.trick.name}}</span>
+                                    <hr>
+                                    <h5 class="text-uppercase">{{comment.trick.description|slice(1,20)}}</h5>
+                                    <hr>
+                                    <div class="price d-flex flex-row align-items-center"> <span class="act-price">Posté par:</span>
+                                        <div class="ml-2"> <span>{{comment.user.firstname|upper}} {{comment.user.lastname|upper}}</span> </div>
+                                        <hr>
+                                        <img alt="" src="{{asset('/uploads/' ~ comment.user.avatar)}}" class="img-thumbnail" style="width=50px;height:50px"/>
+                                    </div>
+                                    <hr>
                                 </div>
-                            </button> 
-                            <br><br>
-                            <div class="custom-control custom-switch" style="display:flex;">
-                                <a type="button" href="{{path('app_comment_activated',{'id':comment.id})}}" class="btn btn-success btn-sm mr-1">Activate</a>
-                                {{ include('comment/_delete_form.html.twig') }}
+                                <p class="about">{{comment.content}}</p>
+                                <div class="sizes mt-5">
+                                    <h6 class="text-uppercase">Posté le:</h6> <label class="radio"> {{comment.createdAt|date('d/m/y à H:i:s')}} </label>
+                                </div>
+                                <hr>
+                                <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary" 
+                                                   {% if comment.activated == 0 %} 
+                                                       <span class="badge badge-danger" style="float:left;">Inactive</span> 
+                                            {% else %}
+                                                <span class="badge badge-success" style="float:left;">Active</span>
+                                            {% endif %}
+                                        </div>
+                                    </button> 
+                                    <br><br>
+                                    <div class="custom-control custom-switch" style="display:flex;">
+                                        <a type="button" href="{{path('app_comment_activated',{'id':comment.id})}}" class="btn btn-success btn-sm mr-1">Activate</a>
+                                        {{ include('comment/_delete_form.html.twig') }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
+    {% endblock %}
