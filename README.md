@@ -6,7 +6,7 @@ php -r "eval('?>'.file_get_contents('http://getcomposer.org/installer'));"
 # installer Git
 https://gitforwindows.org/
 
-#cloner le projet
+# cloner le projet
 git clone  https://github.com/AmiarM/projet-6.git
 
 # installer les différentes dependaces du projet
