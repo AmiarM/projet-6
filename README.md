@@ -1,6 +1,6 @@
 # SnowTricks
 Snow Trick est un site collaboratif à destination des passionnés du snowboard. Son objectif faire connaître ce sport auprès du grand public et aider à l'apprentissage des figures (tricks).
-# installer le gestionnaire de dependance Composer
+# installer le rgestionnaire de dépendances Composer
 php -r "eval('?>'.file_get_contents('http://getcomposer.org/installer'));"
 
 # installer Git
@@ -9,7 +9,7 @@ https://gitforwindows.org/
 # cloner le projet
 git clone  https://github.com/AmiarM/projet-6.git
 
-# installer les différentes dependaces du projet
+# installer les différentes dépendances du projet
 composer install
 
 # Création de la base de données 
