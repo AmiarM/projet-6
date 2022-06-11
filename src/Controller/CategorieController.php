@@ -16,8 +16,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CategorieController extends AbstractController
 {
 
-
+    /**
+     * $categoryRepository
+     *
+     * @var CategorieRepository
+     */
     private $categorieRepository;
+    /**
+     * $manager
+     *
+     * @var EntityManagerInterface
+     */
     private $manager;
 
     public function __construct(EntityManagerInterface $manager, CategorieRepository $categorieRepository)

@@ -58,21 +58,6 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted()) {
             $user->setToken(md5(uniqid(10)));
-            // $password = $user->getPassword();
-            //$user->setPassword($userPasswordHasher->hashPassword($user, $password));
-            //on récupére les images transmises
-            //$image = $form->get('avatar')->getData();
-            // //on genere le nouveau nom du fichier
-            // $fichier = md5(uniqid()) . "." . $image->guessExtension();
-            // //on copie le fichier dans le dossier upload
-            // $image->move(
-            //     $this->getParameter('images_directory'),
-            //     $fichier
-            // );
-            // //on stock l'image dans la base de données 
-            // $image = new Image();
-            // $image->setName($fichier);
-            // $user->setAvatar($fichier);
             $this->manager->persist($user);
             $this->manager->flush();
             $this->addFlash('success', 'User edited successfully');

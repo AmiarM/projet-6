@@ -34,37 +34,43 @@ class RegisterController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $password = $user->getPassword();
-            $user->setToken(md5(uniqid(10)));
-            $user->setPassword($userPasswordHasher->hashPassword($user, $password));
-            //on récupére les images transmises
-            $image = $form->get('avatar')->getData();
-            //on genere le nouveau nom du fichier
-            $fichier = md5(uniqid()) . "." . $image->guessExtension();
-            //on copie le fichier dans le dossier upload
-            $image->move(
-                $this->getParameter('images_directory'),
-                $fichier
-            );
-            //on stock l'image dans la base de données 
-            $image = new Image();
-            $image->setName($fichier);
-            $user->setAvatar($fichier);
-            $em->persist($user);
-            $em->flush();
-            $this->addFlash('success', 'User Created!');
-            //dd($user->getEmail());
-            //envoi de mail
-            $mailer->sendMail(
-                $user->getEmail(),
-                "valider votre inscription",
-                "pour valider votre compte veuillez utiliser l'url suivante:<br>
-                http://localhost:8000/register/confirm/" . $user->getToken(),
-                "confirmer votre inscription",
-                "/login"
-            );
-            $this->addFlash('success', 'Message envoyé avec succès');
-            return $this->redirectToRoute('app_user_login');
+            $email_search = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+            if (!$email_search) {
+                $password = $user->getPassword();
+                $user->setToken(md5(uniqid(10)));
+                $user->setPassword($userPasswordHasher->hashPassword($user, $password));
+                //on récupére les images transmises
+                $image = $form->get('avatar')->getData();
+                //on genere le nouveau nom du fichier
+                $fichier = md5(uniqid()) . "." . $image->guessExtension();
+                //on copie le fichier dans le dossier upload
+                $image->move(
+                    $this->getParameter('images_directory'),
+                    $fichier
+                );
+                //on stock l'image dans la base de données 
+                $image = new Image();
+                $image->setName($fichier);
+                $user->setAvatar($fichier);
+                $em->persist($user);
+                $em->flush();
+                $this->addFlash('success', 'User Created!');
+                //dd($user->getEmail());
+                //envoi de mail
+                $mailer->sendMail(
+                    $user->getEmail(),
+                    "valider votre inscription",
+                    "pour valider votre compte veuillez utiliser l'url suivante:<br>
+                    http://localhost:8000/register/confirm/" . $user->getToken(),
+                    "confirmer votre inscription",
+                    "/login"
+                );
+                $this->addFlash('success', 'Message envoyé avec succès');
+                return $this->redirectToRoute('app_user_login');
+            } else {
+                $this->addFlash('danger', 'L\'email que vous avez renseigné existe déjà');
+                $this->redirectToRoute('app_user_register');
+            }
         }
         return $this->render('register/index.html.twig', [
             'form' => $form->createView()
