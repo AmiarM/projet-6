@@ -88,7 +88,7 @@ class SecurityController extends AbstractController
                 "
                  Bonjour,<br><br>Une demande de réinitialisation de mot de passe a été effectuée pour le site snowtricks.fr. Veuillez cliquer sur le lien suivant : " . $url,
                 "changer votre mot de passe",
-                "/login"
+                "/reset-pass/$token"
             );
             // On crée le message flash de confirmation
             $this->addFlash('success', 'E-mail de réinitialisation du mot de passe envoyé !');
@@ -110,7 +110,7 @@ class SecurityController extends AbstractController
         // On cherche un utilisateur avec le token donné
         $user = $userRepository->findOneBy(['reset_token' => $token]);
         // Si l'utilisateur n'existe pas
-        if ($user === null) {
+        if (!$user) {
             // On affiche une erreur
             $this->addFlash('danger', 'Token Inconnu');
             return $this->redirectToRoute('app_user_login');
