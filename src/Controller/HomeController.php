@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+
 class HomeController extends AbstractController
 {
 
@@ -43,6 +44,9 @@ class HomeController extends AbstractController
     public function show($id, Request $request, PaginatorInterface $paginator): Response
     {
         $trick = $this->trickRepository->find($id);
+        if (!$trick) {
+            throw new NotFoundHttpException('Trick Not Found');
+        }
         $comments = $trick->getComments();
         $paginations = $paginator->paginate(
             $comments, /* query NOT result */

@@ -20,6 +20,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 
+/**
+ * @Route("/register")
+ */
 class RegisterController extends AbstractController
 {
 

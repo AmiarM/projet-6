@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\User;
 
+
+/**
+ * @Route("/account")
+ */
 class AccountController extends AbstractController
 {
 

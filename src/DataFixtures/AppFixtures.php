@@ -69,13 +69,24 @@ class AppFixtures extends Fixture
                             ->setTrick($trick);
                         $manager->persist($image);
                     }
-                    $video = new Video();
-                    for ($v = 0; $v < 10; $v++) {
-                        $video->setUrl($faker->youtubeRandomUri())
-                            //$video->setUrl("https://www.youtube.com/watch?v=SG7GgcnR1F4&t=2199s")
-                            ->setTrick($trick);
-                        $manager->persist($video);
-                    }
+                    $video1 = new Video();
+                    $video1
+                        ->setUrl("https://www.youtube.com/embed/SQyTWk7OxSI")
+                        ->setTrick($trick);
+
+                    $video2 = new Video();
+                    $video2
+                        ->setUrl("https://www.youtube.com/embed/G9qlTInKbNE")
+                        ->setTrick($trick);
+                    $video3 = new Video();
+                    $video3->setUrl("https://www.youtube.com/embed/SQyTWk7OxSI")
+                        ->setTrick($trick);
+
+
+                    $manager->persist($video1);
+                    $manager->persist($video2);
+                    $manager->persist($video3);
+
                     for ($co = 0; $co < 10; $co++) {
                         $comment = new Comment();
                         $comment->setContent($faker->sentence(1))

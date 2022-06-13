@@ -31,14 +31,4 @@ window.onload = () => {
             }
         })
     }
-    $(document).ready(function() {
-        console.log(tmpl);
-        $('#add-video').on('click', function(e) {
-            const index = +$('#video-counter').val();
-            const tmpl = $('.videos').data('prototype').replace(/__name__/g, index);
-            console.log(tmpl);
-            $('#video-counter').val(index + 1);
-            $('#videos').append(tmpl);
-        });
-    });
 }

@@ -1,14 +1,28 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}Edit Trick{% endblock %}
+{% block javascript %}
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(event,tmpl) {
+          console.log(tmpl);
+          $('#add-video').on('click', function(e) {
+            alert('ok');
+              const index = +$('#video-counter').val();
+              const tmpl = $('.videos').data('prototype').replace(/__name__/g, index);
+              console.log(tmpl);
+              $('#video-counter').val(index + 1);
+              $('#videos').append(tmpl);
+          });
+      });
+</script>
+  
+{% endblock %}
 
 {% block admin %}
     <h1>Edit Trick</h1>
 
     {{ include('trick/_form.html.twig', {'button_label': 'Update'}) }}
 
-{% endblock %}
-{% block javascript %}
-    <script src="{{ asset('js/delete.js') }}"></script>
 {% endblock %}

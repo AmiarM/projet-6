@@ -135,7 +135,13 @@
                                         {% endfor %}
                                         {% for video in trick.videos %}
                                             <div class="md-12 trickcard">
-                                                <iframe width="150" height="150" class="embed-responsive-item" src="{{video.url}}"></iframe>
+                                                <div class="embed-responsive embed-responsive-16by9"> 
+                                                    <iframe width="560" height="315" 
+                                                        src="https://www.youtube.com/watch?v=x76VEPXYaI0&list=RDCMUCqhnX4jA0A5paNd1v-zEysw&start_radio=1" 
+                                                        frameborder="0" allow="autoplay; encrypted-media" 
+                                                        allowfullscreen>
+                                                    </iframe> 
+                                            </div>
                                                 <hr>
                                                 {% if app.user %}
                                                     <a href="{{ path('app_video_delete', {id: video.id})}}" data-delete data-token="{{ csrf_token('delete' ~ video.id )}}" class="btn btn-danger btn-sm mt-1"><i class="fa fa-trash" aria-hidden="true"></i></i></a>
