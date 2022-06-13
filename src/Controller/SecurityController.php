@@ -19,6 +19,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
+
+/**
+ * @Route("/security")
+ */
 class SecurityController extends AbstractController
 {
 
