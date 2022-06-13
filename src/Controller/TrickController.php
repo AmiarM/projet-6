@@ -83,6 +83,11 @@ class TrickController extends AbstractController
                 $image->setName($fichier);
                 $trick->addImage($image);
             }
+            //on récupére les images transmises
+            $videos = $form->get('videos')->getData();
+            foreach ($videos as $video) {
+                $trick->addVideo($video);
+            }
             $trick->setUser($user);
             $this->manager->persist($trick);
             $this->manager->flush();
