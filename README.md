@@ -14,7 +14,10 @@ https://gitforwindows.org/
 CD projet-6
 composer install
 ```
-
+# configuration de l'application 
+  modifier le ficher .env pour ajuster les valeurs:
+  - **MAILER_DSN** pour le server de mail 
+  - **DATABASE_URL** pour l'accès à la base de données 
 # Création de la base de données 
 ```symfony console doctrine:database:create```
 
