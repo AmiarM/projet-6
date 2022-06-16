@@ -10,8 +10,8 @@ https://gitforwindows.org/
 ```git clone  https://github.com/AmiarM/projet-6.git```
 
 # installer les différentes dépendances du projet
-```CD projet-6
-composer install```
+```CD projet-6```
+```composer install```
 
 # Création de la base de données 
 ```symfony console doctrine:database:create```
