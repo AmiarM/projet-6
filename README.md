@@ -12,7 +12,8 @@ https://gitforwindows.org/
 # installer les différentes dépendances du projet
 ```
 CD projet-6
-composer install```
+composer install
+```
 
 # Création de la base de données 
 ```symfony console doctrine:database:create```
