@@ -6,7 +6,9 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\Video;
 use App\Form\TrickType;
+use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
+use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,31 +29,26 @@ class TrickController extends AbstractController
     {
         $this->manager = $manager;
     }
-
     /**
-     * @Route("/admin/tricks", name="app_trick_index", methods={"GET"})
+     * @Route("/personal/tricks",name="app_tricks_lists")
+     *
+     * @return void
      */
-    public function index(TrickRepository $trickRepository, PaginatorInterface $paginator, Request $request): Response
+    public function tricks(TrickRepository $trickRepository, PaginatorInterface $paginator, Request $request)
     {
         $user = $this->getUser();
-        if (in_array("ROLE_ADMIN", $user->getRoles())) {
-            $tricks = $trickRepository->findAll();
-            $paginations = $paginator->paginate(
-                $tricks, /* query NOT result */
-                $request->query->getInt('page', 1), /* page number */
-                10 /* limit per page */
-            );
-        } else {
-            $tricks = $trickRepository->findBy([
-                'user' => $user
-            ]);
-            $paginations = $paginator->paginate(
-                $tricks, /* query NOT result */
-                $request->query->getInt('page', 1), /* page number */
-                10 /* limit per page */
-            );
+        if (!$user) {
+            throw new NotFoundHttpException('utilisateur innéxistant');
         }
-        return $this->render('trick/index.html.twig', [
+        $tricks = $trickRepository->findBy([
+            'user' => $user
+        ]);
+        $paginations = $paginator->paginate(
+            $tricks, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            10 /* limit per page */
+        );
+        return $this->render('trick/mytricks.html.twig', [
             'paginations' => $paginations
         ]);
     }
@@ -80,7 +77,7 @@ class TrickController extends AbstractController
                 );
                 //on stock l'image dans la base de données 
                 $image = new Image();
-                $image->setName($fichier);
+                $image->setName('/uploads/' . $fichier);
                 $trick->addImage($image);
             }
             //on récupére les images transmises
@@ -92,13 +89,13 @@ class TrickController extends AbstractController
             $this->manager->persist($trick);
             $this->manager->flush();
             $this->addFlash('success', 'Trick successfully added!');
-            return $this->redirectToRoute('app_trick_index');
+            return $this->redirectToRoute('app_tricks_lists');
         }
 
         return $this->renderForm('trick/new.html.twig', [
             'trick' => $trick,
             'form' => $form,
-            'action' => 'New Trick'
+            'action' => 'Ajouter un Trick'
         ]);
     }
 
@@ -151,16 +148,20 @@ class TrickController extends AbstractController
                 $image->setName($fichier);
                 $trick->addImage($image);
             }
+            $videos = $form->get('videos')->getData();
+            foreach ($videos as $video) {
+                $trick->addVideo($video);
+            }
             $trick->setUser($user);
             $trickRepository->add($trick);
             $this->addFlash('success', 'Trick edited Successfuly');
-            return $this->redirectToRoute('app_trick_index');
+            return $this->redirectToRoute('app_tricks_lists');
         }
 
         return $this->render('trick/edit.html.twig', [
             'form' => $form->createView(),
             'trick' => $trick,
-            'action' => 'Edit Trick'
+            'action' => 'Editer un Trick'
         ]);
     }
 
@@ -200,30 +201,12 @@ class TrickController extends AbstractController
         $paginations = $paginator->paginate(
             $comments, /* query NOT result */
             $request->query->getInt('page', 1), /* page number */
-            5 /* limit per page */
+            4 /* limit per page */
         );
         return $this->render('trick/comments.html.twig', [
             'trick' => $trick,
             'paginations' => $paginations
         ]);
-    }
-
-    /**
-     * @Route("/{id}/activate", name="app_trick_activated", methods={"GET"})
-     */
-    public function activated(Trick $trick)
-    {
-        if (!$trick) {
-            throw new NotFoundHttpException('Trick not Found');
-        }
-        if ($trick->getActivated() == 1) {
-            $this->addFlash('error', 'Trick already acivated');
-        } else {
-            $trick->setActivated(1);
-            $this->addFlash('success', 'Trick acivated successfuly');
-        }
-        $this->manager->flush();
-        return $this->redirectToRoute('app_trick_index');
     }
 
     /**
@@ -246,18 +229,18 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("/delete/{id}", name="app_trick_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_trick_delete", methods={"DELETE","POST"})
      */
     public function delete(Request $request, Trick $trick, TrickRepository $trickRepository): Response
     {
         if (!$trick) {
-            throw new NotFoundHttpException('Trick not Found');
+            throw new NotFoundHttpException('Trick Innexistant');
         }
         if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
             $trickRepository->remove($trick);
             $this->addFlash('success', 'Trick deleted successfuly');
         }
-        return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_tricks_lists', [], Response::HTTP_SEE_OTHER);
     }
 
     /**
@@ -265,14 +248,15 @@ class TrickController extends AbstractController
      */
     public function promote(Image $image, EntityManagerInterface $em)
     {
-        $trick = $image->getTrick();
         if (!$image) {
             throw new NotFoundHttpException('Image Not Foud');
         }
-        if ($image->getIsFirst()) {
-            $this->addFlash('error', 'this image is first');
+        if ($image->getIsFirst() == 1) {
+            $image->setIsFirst(0);
+        } else {
+            $image->setIsFirst(1);
         }
-        $image->setIsFirst(1);
+
         $em->flush();
         $this->addFlash('success', 'status changed successfully');
         return $this->redirectToRoute('app_image_show', [
@@ -281,12 +265,45 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/personal/tricks",name="app_tricks_lists")
      *
-     * @return void
+     * @Route("/images/{id}",name="app_trick_images")
      */
-    public function tricks()
+    public function getImages(Request $request, PaginatorInterface $paginator, Trick $trick, ImageRepository $imageRepository)
     {
-        return $this->render('trick/mytricks.html.twig');
+        if (!$trick) {
+            throw new NotFoundHttpException("trick innéxistant");
+        }
+        $images = $imageRepository->findBy([
+            'trick' => $trick
+        ]);
+        $paginations = $paginator->paginate(
+            $images, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            3 /* limit per page */
+        );
+        return $this->render('image/index.html.twig', [
+            'paginations' => $paginations
+        ]);
+    }
+    /**
+     *
+     * @Route("/videos/{id}",name="app_trick_videos")
+     */
+    public function getVideos(Request $request, PaginatorInterface $paginator, Trick $trick, VideoRepository $videoRepository)
+    {
+        if (!$trick) {
+            throw new NotFoundHttpException("trick innéxistant");
+        }
+        $videos = $videoRepository->findBy([
+            'trick' => $trick
+        ]);
+        $paginations = $paginator->paginate(
+            $videos, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            3 /* limit per page */
+        );
+        return $this->render('video/index.html.twig', [
+            'paginations' => $paginations
+        ]);
     }
 }

@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Hello CategorysAdminController!{% endblock %}
+{% block title %}Liste des Catégories {% endblock %}
 
 {% block admin %}
     <div class="container mb-5">
@@ -9,7 +9,7 @@
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
                         <ol class="breadcrumb">
-                            <li><a href="#">Home</a></li>
+                            <li><a href="{{path('app_categories')}}">Acceuil</a></li>
                             <li class="active"><span>Categories</span></li>
                         </ol>
                     </div>
@@ -19,13 +19,22 @@
         <div class="row">
             <div class="container mb-5">
                 <div class="row">
-                    {% for message in app.flashes('success') %}
-                        <div class="col-lg-12 text-center">
-                            <div class="alert alert-success">
-                                {{ message }}
-                            </div>
+                    {% if app.flashes is defined %}
+                {% for message in app.flashes('error') %}
+                <div class="col-lg-12 text-center">
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% for message in app.flashes('success') %}
+                    <div class="col-lg-12 text-center">
+                        <div class="alert alert-success">
+                            {{ message }}
                         </div>
-                    {% endfor %}
+                    </div>
+                {% endfor %}
+           {% endif %}
                     {% if paginations|length ==0 %}
                         <div class="alert alert-danger" style="text-align: center;">
                             Aucune Catégorie en Base de Données
@@ -36,7 +45,7 @@
                                 <div class="col-lg-12">
                                     <div class="main-box clearfix">
                                         <header class="main-box-header clearfix">
-                                            <h2>MANAGE CATEGORIE</h2>
+                                            <h2>GESTION DES  CATEGORIES</h2>
                                             <div id="reportrange" class="float-right daterange-filter">
                                                 <a href="{{path('app_categorie_add')}}" class="table-link">
                                                     <span class="fa-stack">
@@ -51,7 +60,7 @@
                                                 <table id="table-example" class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>Name</th>
+                                                            <th>Categorie</th>
                                                             <th>ACTIONS</th>
                                                         </tr>
                                                     </thead>
@@ -60,18 +69,13 @@
                                                             <tr>
                                                                 <td>{{categorie.name}}</td>
                                                                 <td>
-                                                                    <a href="{{ path('app_categorie_edit',{'id':categorie.id}) }}" class="table-link">
+                                                                    <a  style="float:left;" href="{{ path('app_categorie_edit',{'id':categorie.id}) }}" class="table-link">
                                                                         <span class="fa-stack">
                                                                             <i class="fa fa-square fa-stack-2x"></i>
                                                                             <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
                                                                         </span>
                                                                     </a>
-                                                                    <a href="{{ path('app_categorie_delete',{'id':categorie.id}) }}" class="table-link danger">
-                                                                        <span class="fa-stack">
-                                                                            <i class="fa fa-square fa-stack-2x"></i>
-                                                                            <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
-                                                                        </span>
-                                                                    </a>
+                                                                    {{ include('categorie/_delete_form.html.twig') }}
                                                                 </td>
                                                             </tr>
                                                         {% endfor %}

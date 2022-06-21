@@ -1,29 +1,31 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Hello CategorysAdminController!{% endblock %}
+{% block title %}Liste des Videos{% endblock %}
 
 {% block admin %}
     <div class="container mb-5">
         <div class="row">
-            {% for message in app.flashes('error') %}
-            <div class="col-lg-12 text-center">
-                <div class="alert alert-danger">
-                    {{ message }}
-                </div>
-            </div>
-            {% endfor %}
-            {% for message in app.flashes('success') %}
+           {% if app.flashes is defined %}
+                {% for message in app.flashes('error') %}
                 <div class="col-lg-12 text-center">
-                    <div class="alert alert-success">
+                    <div class="alert alert-danger">
                         {{ message }}
                     </div>
                 </div>
-            {% endfor %}
+                {% endfor %}
+                {% for message in app.flashes('success') %}
+                    <div class="col-lg-12 text-center">
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    </div>
+                {% endfor %}
+           {% endif %}
             <div class="col-lg-12">
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
                         <ol class="breadcrumb">
-                            <li><a href="{{path('app_homepage')}}">Home</a></li>
+                            <li><a href="{{path('app_homepage')}}">Acceuil</a></li>
                             <li class="active"><span>videos</span></li>
                         </ol>
                     </div>
@@ -33,17 +35,12 @@
         <div class="row">
             <div class="container mb-5">
                 <div class="row">
-                    {% if paginations|length ==0 %}
-                        <div class="alert alert-danger" style="text-align: center;">
-                            Aucune video en Base de Données
-                        </div>
-                    {% else %}
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="main-box clearfix">
                                     <header class="main-box-header clearfix">
-                                        <h2>MANAGE video</h2>
+                                        <h2>Gestion des video</h2>
                                         <div id="reportrange" class="float-right daterange-filter">
                                             <a href="{{path('app_video_new')}}" class="table-link">
                                                 <span class="fa-stack">
@@ -53,12 +50,18 @@
                                             </a>
                                         </div>
                                     </header>
+                                    {% if paginations|length ==0 %}
+                                        <div class="alert alert-danger" style="text-align: center;">
+                                            Aucune video en Base de Données
+                                        </div>
+                                    {% else %}
                                     <div class="main-box-body clearfix">
                                         <div class="table-responsive">
                                             <table id="table-example" class="table table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>Url</th>
+                                                        <th>ID DU TRICK</th>
                                                         <th>TRICK</th>
                                                         <th>ACTIONS </th>
                                                     </tr>
@@ -68,8 +71,11 @@
                                                 <tr>
                                                     <td>
                                                         <div class="embed-responsive embed-responsive-16by9">
-                                                            <iframe class="embed-responsive-item" src="{{video.url}}" width=50px; height=50px;></iframe>
+                                                            <iframe class="embed-responsive-item" src="{{video.url}}" width=50px height=50px></iframe>
                                                         </div>
+                                                    </td>
+                                                    <td>
+                                                        {{video.trick.id}}
                                                     </td>
                                                     <td>
                                                         {{video.trick.name}}
@@ -97,9 +103,9 @@
                                             {{ knp_pagination_render(paginations) }}
                                         </div>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
-    {% endif %}
 {% endblock %}

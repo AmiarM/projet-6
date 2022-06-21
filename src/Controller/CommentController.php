@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,15 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
 
-    /**
-     * @Route("/", name="app_comment_index", methods={"GET"})
-     */
-    public function index(CommentRepository $commentRepository): Response
-    {
-        return $this->render('comment/index.html.twig', [
-            'comments' => $commentRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/new", name="app_comment_new", methods={"GET", "POST"})
@@ -41,13 +34,13 @@ class CommentController extends AbstractController
             $comment->setUser($user);
             $commentRepository->add($comment);
             $this->addFlash('success', 'comment successfully added!');
-            return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_comment_lists', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('comment/new.html.twig', [
             'comment' => $comment,
             'form' => $form,
-            'action' => 'New Comment'
+            'action' => 'Ajouter'
         ]);
     }
 
@@ -61,26 +54,25 @@ class CommentController extends AbstractController
         ]);
     }
 
-    // /**
-    //  * @Route("/{id}/edit", name="app_comment_edit", methods={"GET", "POST"})
-    //  */
-    // public function edit(Request $request, Comment $comment, CommentRepository $commentRepository): Response
-    // {
-    //     $form = $this->createForm(CommentType::class, $comment);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $commentRepository->add($comment);
-    //         return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->renderForm('comment/edit.html.twig', [
-    //         'comment' => $comment,
-    //         'form' => $form,
-    //         'action' => 'Edit Categorie'
-    //     ]);
-    // }
-
+    /**
+     * @Route("/{id}/edit", name="app_comment_edit", methods={"POST","GET"})
+     */
+    public function edit(EntityManagerInterface $manager, Comment $comment, Request $request): Response
+    {
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment = $form->getData();
+            $manager->flush();
+            $this->addFlash('success', 'commentaire modifié avec succès');
+            return $this->redirectToRoute('app_comment_lists');
+        }
+        return $this->render('comment/edit.html.twig', [
+            'comment' => $comment,
+            'form' => $form->createView(),
+            'action' => 'Editer'
+        ]);
+    }
     /**
      * @Route("/{id}/delete", name="app_comment_delete",methods={"POST"})
      */
@@ -91,35 +83,27 @@ class CommentController extends AbstractController
             $this->addFlash('error', 'comment  deleted successfully');
         }
 
-        return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_comment_lists', [], Response::HTTP_SEE_OTHER);
     }
-    /**
-     * @Route("/{id}/comment/activated", name="app_comment_activated")
-     */
-    public function published(CommentRepository $commentRepository, $id)
-    {
-        $comment = $commentRepository->find($id);
-        if (!$comment) {
-            throw new NotFoundHttpException('comment not found');
-        }
-        if ($comment->getActivated() == 1) {
-            $this->addFlash('error', 'comment already activated');
-        } else {
-            $comment->setActivated(1);
-            $this->addFlash('success', 'comment activated successfully');
-        }
-        $commentRepository->add($comment);
-        return $this->redirectToRoute('app_comment_index');
-        return $this->render('trick/comments.html.twig', [
-            'comment' => $comment
-        ]);
-    }
-
     /**
      * @Route("/personal/lists", name="app_comment_lists", methods={"GET"})
      */
-    public function myComments(): Response
+    public function myComments(CommentRepository $commentRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        return $this->render('comment/mycomments.html.twig');
+        $user = $this->getUser();
+        if (!$user) {
+            throw new NotFoundHttpException("Utilisateur innexistant");
+        }
+        $comments = $commentRepository->findBy([
+            'user' => $user
+        ]);
+        $paginations = $paginator->paginate(
+            $comments, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            10 /* limit per page */
+        );
+        return $this->render('comment/mycomments.html.twig', [
+            'paginations' => $paginations
+        ]);
     }
 }

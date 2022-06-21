@@ -26,10 +26,10 @@ class ImageType extends AbstractType
                 ]
             ])
             ->add('isFirst', ChoiceType::class, [
-                'label' => 'Is First',
+                'label' => 'Image Favorite',
                 'choices' => [
-                    'First' => 1,
-                    'Not First' => 0
+                    'Oui' => 1,
+                    'Non' => 0
                 ],
                 'attr' => [
                     'class' => 'form-control'
@@ -38,7 +38,7 @@ class ImageType extends AbstractType
 
             ])
             ->add('trick', EntityType::class, [
-                'label' => 'Choose Trick:',
+                'label' => 'Choisir un Trick:',
                 'required' => true,
                 'class' => Trick::class,
                 'choice_label' => 'name',

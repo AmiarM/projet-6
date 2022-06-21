@@ -30,8 +30,6 @@ class Comment
     public function __construct()
     {
         $this->createdAt = new DateTime();
-        $this->replies = new ArrayCollection();
-        $this->activated = 0;
     }
 
     /**
@@ -62,10 +60,6 @@ class Comment
      */
     private $user;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $activated;
 
     public function getId(): ?int
     {
@@ -128,18 +122,6 @@ class Comment
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getActivated(): ?bool
-    {
-        return $this->activated;
-    }
-
-    public function setActivated(bool $activated): self
-    {
-        $this->activated = $activated;
 
         return $this;
     }

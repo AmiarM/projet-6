@@ -33,9 +33,7 @@ class AppFixtures extends Fixture
         $admin->setFirstname("admin")
             ->setLastname("admin")
             ->setPassword($this->hasher->hashPassword($admin, "password"))
-            ->setRoles(['ROLE_ADMIN'])
             ->setEmail('admin@admin.com')
-            ->setActivated(1)
             ->setAvatar($faker->imageUrl());
         $manager->persist($admin);
         for ($u = 0; $u < 5; $u++) {
@@ -49,22 +47,21 @@ class AppFixtures extends Fixture
 
             $manager->persist($user);
         }
-        for ($c = 0; $c < 10; $c++) {
+        for ($c = 0; $c < 5; $c++) {
             $categorie = new Categorie();
             $categorie->setName($faker->word(2));
             $manager->persist($categorie);
-            for ($co = 0; $co < 10; $co++) {
-                for ($t = 0; $t < 10; $t++) {
+            for ($co = 0; $co < 5; $co++) {
+                for ($t = 0; $t < 5; $t++) {
                     $trick = new Trick($faker->sentence(1));
 
                     $trick->setName($faker->word(1))
                         ->setDescription($faker->paragraph())
                         ->setCategorie($categorie)
-                        ->setUser($user)
-                        ->setActivated(1);
+                        ->setUser($user);
                     $manager->persist($trick);
                     $image = new Image();
-                    for ($i = 0; $i < 10; $i++) {
+                    for ($i = 0; $i < 5; $i++) {
                         $image->setName($faker->imageUrl(400, 400, true))
                             ->setTrick($trick);
                         $manager->persist($image);
@@ -87,10 +84,9 @@ class AppFixtures extends Fixture
                     $manager->persist($video2);
                     $manager->persist($video3);
 
-                    for ($co = 0; $co < 10; $co++) {
+                    for ($co = 0; $co < 5; $co++) {
                         $comment = new Comment();
                         $comment->setContent($faker->sentence(1))
-                            ->setActivated(1)
                             ->setTrick($trick)
                             ->setUser($user);
                         $manager->persist($comment);

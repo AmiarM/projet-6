@@ -84,18 +84,12 @@ class Trick
      */
     private $videos;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $activated;
-
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
-        $this->activated = 0;
     }
 
     public function getId(): ?int
@@ -266,18 +260,6 @@ class Trick
                 $video->setTrick(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getActivated(): ?bool
-    {
-        return $this->activated;
-    }
-
-    public function setActivated(bool $activated): self
-    {
-        $this->activated = $activated;
 
         return $this;
     }

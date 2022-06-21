@@ -13,6 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @Route("/categorie")
+ */
 class CategorieController extends AbstractController
 {
 
@@ -36,7 +39,7 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("admin/categories", name="app_categories")
+     * @Route("/lists", name="app_categories")
      */
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
@@ -52,7 +55,7 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/admin/categorie/add", name="app_categorie_add")
+     * @Route("/add", name="app_categorie_add")
      */
     public function add(Request $request): Response
     {
@@ -68,12 +71,12 @@ class CategorieController extends AbstractController
         }
         return $this->render('categorie/create.html.twig', [
             'form' => $form->createView(),
-            'action' => 'Add Categorie'
+            'action' => 'Ajouter une Catégorie'
         ]);
     }
 
     /**
-     * @Route("/admin/categorie/edit/{id}", name="app_categorie_edit")
+     * @Route("/edit/{id}", name="app_categorie_edit")
      */
     public function edit(Request $request, $id): Response
     {
@@ -93,12 +96,12 @@ class CategorieController extends AbstractController
         return $this->render('categorie/edit.html.twig', [
             'form' => $form->createView(),
             'categorie' => $categorie,
-            'action' => 'Edit Categorie'
+            'action' => 'Editer une Catégorie'
         ]);
     }
 
     /**
-     * @Route("/admin/categorie/delete/{id}", name="app_categorie_delete")
+     * @Route("/delete/{id}", name="app_categorie_delete")
      */
     public function delete($id): Response
     {

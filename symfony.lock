@@ -113,12 +113,6 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.7"
     },
-    "friendsofsymfony/ckeditor-bundle": {
-        "version": "2.4",
-        "recipe": {
-            "version": "2.0"
-        }
-    },
     "gedmo/doctrine-extensions": {
         "version": "v3.7.0"
     },

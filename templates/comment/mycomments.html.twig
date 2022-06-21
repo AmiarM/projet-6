@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Mes Commentaires{% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" type="text/css" href="css/libs/nanoscroller.css" />
     <link rel="stylesheet" type="text/css" href="{{asset('css/theme_styles.css')}}" />
@@ -9,12 +9,28 @@
 {% block admin %}
     <div class="container mb-5">
         <div class="row">
+            {% if app.flashes is defined %}
+                {% for message in app.flashes('error') %}
+                <div class="col-lg-12 text-center">
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% for message in app.flashes('success') %}
+                    <div class="col-lg-12 text-center">
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    </div>
+                {% endfor %}
+           {% endif %}
             <div class="col-lg-12">
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
                         <ol class="breadcrumb">
-                            <li><a href="#">Home</a></li>
-                            <li class="active"><span>Comments</span></li>
+                            <li><a href="{{path('app_comment_lists')}}">Acceuil</a></li>
+                            <li class="active"><span>Commentaires</span></li>
                         </ol>
                     </div>
                 </div>
@@ -32,16 +48,16 @@
                                 <thead>
                                     <tr>
                                         <th><a href="#"><span>ID</span></a></th>
-                                        <th><a href="#" class="desc"><span>Content</span></a></th>
+                                        <th><a href="#" class="desc"><span>Contenu</span></a></th>
                                         <th><a href="#" class="desc"><span>TRICK</span></a></th>
-                                        <th><a href="#" class="desc"><span>USER</span></a></th>
-                                        <th><a href="#" class="desc"><span>CREATEDAT</span></a></th>
-                                        <th><a href="#" class="desc"><span>ACTIVATED</span></a></th>
-                                        <th><a href="#" class="desc"><span>Actions</span></a></th>
+                                        <th><a href="#" class="desc"><span>ID DU TRICK</span></a></th>
+                                        <th><a href="#" class="desc"><span>UTILISATEUR</span></a></th>
+                                        <th><a href="#" class="desc"><span>CRÉÉ LE</span></a></th>
+                                        <th><a href="#" class="desc"><span>ACTIONS</span></a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for comment in app.user.comments %}
+                                    {% for comment in paginations %}
                                         <tr>
                                             <td>
                                                 {{ comment.id }}
@@ -53,34 +69,28 @@
                                                 {{ comment.trick.name }}
                                             </td>
                                             <td>
+                                                {{ comment.trick.id }}
+                                            </td>
+                                            <td>
                                                 {{ comment.user.email }}
                                             </td>
                                             <td>
                                                 {{ comment.createdAt|date('d/m/y') }}
                                             </td>
-                                            <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary" 
-                                                           {% if comment.activated == 0 %} 
-                                                               <span class="badge badge-danger" style="float:left;">Inactive</span> 
-                                                    {% else %}
-                                                        <span class="badge badge-success" style="float:left;">Active</span>
-                                                    {% endif %}
-                                                </div>
-                                            </td>
                                             <td style="width: 20%;">
-                                                <a href="{{path('app_comment_show',{'id':comment.id})}}" class="table-link">
+                                                <a  style="float:left" href="{{path('app_comment_show',{'id':comment.id})}}" class="table-link">
                                                     <span class="fa-stack">
                                                         <i class="fa fa-square fa-stack-2x"></i>
                                                         <i class="fa fa-eye fa-stack-1x fa-inverse"></i>
                                                     </span>
                                                 </a>
-                                                <a href="{{path('app_comment_delete',{id:comment.id})}}" class="table-link danger">
+                                                <a  style="float:left" href="{{path('app_comment_edit',{'id':comment.id})}}" class="table-link">
                                                     <span class="fa-stack">
                                                         <i class="fa fa-square fa-stack-2x"></i>
-                                                        <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                                        <i class="fa fa-edit fa-stack-1x fa-inverse"></i>
                                                     </span>
                                                 </a>
+                                                {{ include('comment/_delete_form.html.twig') }}
                                             </td>
                                         </tr>
                                     {%else%}
@@ -95,6 +105,9 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="navigation">
+                        {{ knp_pagination_render(paginations) }}
                     </div>
                 </div>
             </div>

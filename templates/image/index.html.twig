@@ -1,24 +1,26 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Hello CategorysAdminController!{% endblock %}
+{% block title %}Liste des Images{% endblock %}
 
 {% block admin %}
     <div class="container mb-5">
         <div class="row">
-            {% for message in app.flashes('error') %}
+            {% if app.flashes is defined %}
+                {% for message in app.flashes('error') %}
                 <div class="col-lg-12 text-center">
                     <div class="alert alert-danger">
                         {{ message }}
                     </div>
                 </div>
-            {% endfor %}
-            {% for message in app.flashes('success') %}
-                <div class="col-lg-12 text-center">
-                    <div class="alert alert-success">
-                        {{ message }}
+                {% endfor %}
+                {% for message in app.flashes('success') %}
+                    <div class="col-lg-12 text-center">
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+           {% endif %}
             <div class="col-lg-12">
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
@@ -33,11 +35,6 @@
         <div class="row">
             <div class="container mb-5">
                 <div class="row">
-                    {% if paginations|length ==0 %}
-                        <div class="alert alert-danger" style="text-align: center;">
-                            Aucune Image en Base de Données
-                        </div>
-                    {% else %}
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -54,11 +51,17 @@
                                             </div>
                                         </header>
                                         <div class="main-box-body clearfix">
-                                            <div class="table-responsive">
+                                            {% if paginations |length == 0  %}
+                                                <div class="alert alert-danger" style="text-align: center;">
+                                                    Aucune Image en Base de Données
+                                                </div>
+                                            {% else %}
+                                            <div class="table-responsive">    
                                                 <table id="table-example" class="table table-hover">
                                                     <thead>
                                                         <tr>
                                                             <th>Name</th>
+                                                            <th>TRICK_ID</th>
                                                             <th>TRICK</th>
                                                             <th>ISFIRST</th>
                                                             <th>ACTIONS </th>
@@ -69,6 +72,9 @@
                                                             <tr>
                                                                 <td>
                                                                     <img src="{{ image.name}}" alt="{{'image'~image.id}}" width=50px,height=50px;>
+                                                                </td>
+                                                                <td>
+                                                                    {{image.trick.id}}
                                                                 </td>
                                                                 <td>
                                                                     {{image.trick.name}}
@@ -103,6 +109,7 @@
                                                     {{ knp_pagination_render(paginations) }}
                                                 </div>
                                             </div>
+                                        {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -112,5 +119,4 @@
                 </div>
             </div>
         </div>
-    {% endif %}
 {% endblock %}

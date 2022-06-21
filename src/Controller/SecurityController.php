@@ -53,7 +53,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/forgotten-password", name="app_user_forgotten_password")
      */
-    public function forgottenPass(EntityManagerInterface $em, Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGeneratorInterface, Mailer $mailer): Response
+    public function forgottenPass(EntityManagerInterface $em, Request $request, UserRepository $userRepository, Mailer $mailer): Response
     {
         //on créer le formulaire
         $form = $this->createForm(ResetPassType::class);
@@ -71,10 +71,10 @@ class SecurityController extends AbstractController
             if (!$user) {
                 //onenvoie un message
                 $this->addFlash('danger', 'user not found');
-                return $this->redirectToRoute('user_login');
+                return $this->redirectToRoute('app_user_login');
             }
             //on genere un token
-            $token = $tokenGeneratorInterface->generateToken();
+            $token = md5(uniqid(10));
             try {
                 $user->setResetToken($token);
                 //$user->setActivated(1);
@@ -92,7 +92,7 @@ class SecurityController extends AbstractController
                 "
                  Bonjour,<br><br>Une demande de réinitialisation de mot de passe a été effectuée pour le site snowtricks.fr. Veuillez cliquer sur le lien suivant : " . $url,
                 "changer votre mot de passe",
-                "/reset-pass/$token"
+                "/reset-pass/" . trim($token, " \n\r\t\v\x00")
             );
             // On crée le message flash de confirmation
             $this->addFlash('success', 'E-mail de réinitialisation du mot de passe envoyé !');

@@ -5,7 +5,7 @@
                 <div id="content-header" class="clearfix">
                     <div class="float-left">
                         <ol class="breadcrumb">
-                            <li><a href="#">Home</a></li>
+                            <li><a href="{{path('app_tricks_lists')}}">Acceuil</a></li>
                             <li class="active"><span>Trick</span></li>
                             <li class="active"><span>{{action}}</span></li>
                         </ol>
@@ -31,11 +31,13 @@
                             <div style="background-color: red; padding: 10px;">
                                 <div class="form-group">
                                     <div id="videos" class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
-                                        {{ form_widget(form.videos) }}
+                                        {% for video in form.videos%}
+                                            {{form_widget(video.url)}}
+                                        {%endfor%}
                                     </div>
                                 </div>
                             </div>
-                            <button id="add-video" class="add-video mb-5 mt-1 btn btn-primary" type="button" data-collection-holder-class="videos">Add a video</button>
+                            <button id="add-video" class="add-video mb-5 mt-1 btn btn-primary" type="button" data-collection-holder-class="videos">Ajouter une video</button>
                             <input type="hidden" id="video-counter" value="0">
                             <hr>
                             {{ form_widget(form.submit)}}
@@ -49,8 +51,11 @@
                                     {% for image in trick.images %}
                                     <div class="col-md-3" style="margin-right:5px;">
                                         <img src="{{image.name}}" class="rounded mx-auto d-block" width="150px; height=150px">
+                                        <br>
+                                        <hr>
                                         {# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
-                                        <a href="{{ path('app_trick_image_delete', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-danger mt-1">Delete</a>
+                                        <a href="{{path('app_image_edit',{'id':image.id})}}" class="btn btn-primary btn-sm mr-2" style="float:left;"> <i class="fa fa-edit"></i></a>
+                                        {{ include('image/_delete_form.html.twig') }}
                                     </div>
                                     {% endfor %}
                                 </div>
@@ -62,7 +67,10 @@
                                         <div class="embed-responsive embed-responsive-16by9">
                                             <iframe class="embed-responsive-item" src="{{video.url}}" width=150px; height=150px;></iframe>
                                         </div>
-                                        <a href="{{ path('app_video_delete', {id: video.id})}}" data-delet data-token="{{ csrf_token('delete' ~ video.id )}}" class="btn btn-danger mt-1">Delete</a>
+                                        <br>
+                                        <hr>
+                                        <a href="{{path('app_video_edit',{'id':video.id})}}" class="btn btn-primary btn-sm mr-2" style="float:left;"> <i class="fa fa-edit"></i></a>
+                                        {{ include('video/_delete_form.html.twig') }}
                                     </div>
                                     {% endfor %}
                                 </div>

@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}video{% endblock %}
+{% block title %}video-{{video.trick.name}}{% endblock %}
 
 {% block admin %}
 {% for message in app.flashes('error') %}
@@ -43,11 +43,11 @@
                     <div class="comment-widgets">
                         <!-- Comment Row -->
                         <div class="d-flex flex-row comment-row mt-3">
-                            <div class="p-2"><img src="{{asset('/uploads/'~video.trick.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                            <div class="p-2"><img src="{{video.trick.user.avatar}}" alt="user" width="50" class="rounded-circle"></div>
                             <div class="comment-text w-100 mb-3">
                                 <h6 class="font-medium" style="font-weight:bold;">Trick posté par: {{video.trick.user.firstname|upper}} {{video.trick.user.lastname|upper}}</h6> 
                                 <hr>
-                                <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">published at: {{video.trick.createdAt|date('d/m/y à H:i:s')}}
+                                <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">publié le: {{video.trick.createdAt|date('d/m/y à H:i:s')}}
                                 </span>  
                                 {{ include('video/_delete_form.html.twig') }}
                             </div>
@@ -65,12 +65,12 @@
                             {{video.trick.slug}}
                         </div>
                         <div class="form-group">
-                            <label for="colors" style="font-weight:bold;">Name</label>
+                            <label for="colors" style="font-weight:bold;">Url de la Vidéo</label>
                             <br>
                             {{video.url}}
                         </div>
                         <a href="{{ path('app_video_index') }}" class="btn btn-success btn-lg btn-block text-uppercase">
-                            <i class="fa fa-arrow-left"></i> back to Video Lists
+                            <i class="fa fa-arrow-left"></i> Retour
                         </a>
                     </form> 
                 </div>

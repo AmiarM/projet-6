@@ -32,7 +32,7 @@ class HomeController extends AbstractController
      */
     public function index(): Response
     {
-        $tricks = $this->trickRepository->findBy(['activated' => 1]);
+        $tricks = $this->trickRepository->findBy([], ['createdAt' => 'desc']);
         return $this->render('home/index.html.twig', [
             'tricks' => $tricks
         ]);
@@ -45,7 +45,7 @@ class HomeController extends AbstractController
     {
         $trick = $this->trickRepository->find($id);
         if (!$trick) {
-            throw new NotFoundHttpException('Trick Not Found');
+            throw new NotFoundHttpException('Trick innéxistant');
         }
         $comments = $trick->getComments();
         $paginations = $paginator->paginate(
@@ -53,13 +53,7 @@ class HomeController extends AbstractController
             $request->query->getInt('page', 1), /* page number */
             3 /* limit per page */
         );
-        if (!$trick) {
-            throw new NotFoundHttpException("trick not found");
-        }
-        // $user = $this->getUser();
-        // if (!$user) {
-        //     throw new NotFoundHttpException("user not found");
-        // }
+        $user = $this->getUser();
         //on créer le commentaire vièrge
         $comment = new Comment();
         //on génére le formulaire
