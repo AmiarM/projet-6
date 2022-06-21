@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Trick;
 use App\Form\VideoType;
 use App\Entity\Categorie;
+use App\Form\VideoNewType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,19 +26,19 @@ class TrickType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Name',
                 'attr' => [
-                    'placeholder' => 'Trick Name',
+                    'placeholder' => 'Nom du Trick',
                     'class' => 'form-control mb-2'
                 ]
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'attr' => [
-                    'placeholder' => 'Trick Description',
+                    'placeholder' => 'Description du Trick',
                     'class' => 'form-control mb-2'
                 ]
             ])
             ->add('categorie', EntityType::class, [
-                'label' => 'Choose catégorie:',
+                'label' => 'Choisir une catégorie:',
                 'required' => true,
                 'class' => Categorie::class,
                 'choice_label' => 'name',

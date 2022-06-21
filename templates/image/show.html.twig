@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Image{% endblock %}
+{% block title %}Image-{{image.trick.name}}-{{image.trick.id}}{% endblock %}
 
 {% block admin %}
     {% for message in app.flashes('error') %}
@@ -41,7 +41,7 @@
                         <div class="comment-widgets">
                             <!-- Comment Row -->
                             <div class="d-flex flex-row comment-row mt-3">
-                                <div class="p-2"><img src="{{asset('/uploads/'~image.trick.user.avatar)}}" alt="user" width="50" class="rounded-circle"></div>
+                                <div class="p-2"><img src="{{image.trick.user.avatar}}" alt="user" width="50" class="rounded-circle"></div>
                                 <div class="comment-text w-100 mb-3">
                                     <h6 class="font-medium" style="font-weight:bold;">Trick posté par: {{image.trick.user.firstname|upper}} {{image.trick.user.lastname|upper}}</h6> 
                                     <p>
@@ -78,12 +78,12 @@
                                     {{image.trick.slug}}
                                 </div>
                                 <div class="form-group">
-                                    <label for="colors" style="font-weight:bold;">Name</label>
+                                    <label for="colors" style="font-weight:bold;">Nom du L'image</label>
                                     <br>
                                     {{image.name}}
                                 </div>
                                 <a href="{{ path('app_image_index') }}" class="btn btn-success btn-lg btn-block text-uppercase">
-                                    <i class="fa fa-arrow-left"></i> back to image Lists
+                                    <i class="fa fa-arrow-left"></i> Retour
                                 </a>
                             </form> 
                         </div>

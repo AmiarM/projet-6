@@ -4,9 +4,9 @@
             <div id="content-header" class="clearfix">
                 <div class="float-left">
                     <ol class="breadcrumb">
-                        <li><a href="#">Home</a></li>
-                        <li class="active"><span>Comment</span></li>
-                        <li class="active"><span>Add</span></li>
+                        <li><a href="{{path('app_comment_lists')}}">Acceuil</a></li>
+                        <li class="active"><span>Commentaire</span></li>
+                        <li class="active"><span>Ajouter un Commentaire</span></li>
                     </ol>
                 </div>
             </div>
@@ -16,15 +16,12 @@
         <div class="col-lg-6">
             <div class="main-box" style=" height:510px;">
                 <header class="main-box-header clearfix">
-                    <h2>ADD Comment</h2>
+                    <h2>{{action}} un Commentaire</h2>
                 </header>
                 <div class="main-box-body clearfix">
                     {{form_start(form)}}
                     <div class="form-group">
                         {{form_row(form.content)}}
-                    </div>
-                    <div class="form-group">
-                        {{form_row(form.trick)}}
                     </div>
                     {{form_row(form.submit)}}
                     {{form_end(form)}}
@@ -32,7 +29,7 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <img src="{{asset('images/gal2.jpg')}}" alt="" width="600px" height="510px">
+            <img class="img-thumbnail" src="{{asset('images/bannierre.jpg')}}" alt="" width="600px" height="510px">
             <div>
             </div>
         </div>

@@ -4,7 +4,11 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <title>Dashboard | SnowTricks</title>
+        <title>
+            {% block title %}
+            Tableau de Bord | SnowTricks
+            {% endblock %}
+        </title>
         {% block stylesheet %}
         {% endblock %}
         {% block javascript %} {% endblock %}
@@ -20,16 +24,12 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery-jvectormap-2.0.3.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset('css/weather-icons.min.css') }}" />
 
-        <link type="image/x-icon" href="{{ asset('images/favicon.png') }}" rel="shortcut icon" />
+        
 
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
-        <!--[if lt IE 9]>
-                    <script src="js/html5shiv.js"></script>
-                    <script src="js/respond.min.js"></script>
-                <![endif]-->
     </head>
     <body>
-            {% if app.user.roles is defined %}
+            {% if app.user  %}
             <div id="theme-wrapper">
                 <header class="navbar navbar-expand-lg navbar-light container d-block d-lg-flex" id="header-navbar">
                     <a class="navbar-brand float-left float-lg-none" href="index.html" id="logo">
@@ -42,32 +42,28 @@
                     <ul class="nav navbar-nav mr-auto d-none d-lg-block mrg-l-none">
                         <li class="dropdown d-none d-md-block">
                             <a class="btn dropdown-toggle" data-toggle="dropdown">
-                                Manage Website
+                                Administration du site
                             </a>
                             <ul class="dropdown-menu">
-                            {% for role in app.user.roles %}
-                                {% if role == 'ROLE_ADMIN' %}
                                 <li class="item">
                                     <a href="{{path('app_categorie_add')}}">
                                         <i class="fa fa-sitemap">
                                         </i>
-                                        New Categorie
+                                        Ajouter Categorie
                                     </a>
                                 </li>
-                                {% endif %}
-                            {% endfor %}
                                 <li class="item">
                                     <a href="{{path('app_trick_new')}}">
                                         <i class="fa fa-snowboarding">
                                         </i>
-                                        New Trick
+                                        Ajouter Trick
                                     </a>
                                 </li>
                                 <li class="item">
                                     <a href="{{path('app_comment_new')}}">
                                         <i class="fa fa-comments">
                                         </i>
-                                        New Comment
+                                        Ajouter un Commentaire
                                     </a>
                                 </li>
                             </ul>
@@ -109,17 +105,10 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{path('app_user_change_password')}}">
-                                        <i class="fa fa-key">
-                                        </i>
-                                        Change Password
-                                    </a>
-                                </li>
-                                <li>
                                     <a href="{{path('app_user_logout')}}">
                                         <i class="fa fa-power-off">
                                         </i>
-                                        Logout
+                                        Déconnexion
                                     </a>
                                 </li>
                             </ul>
@@ -146,10 +135,8 @@
                                                     <i class="fa fa-angle-down"></i>
                                                 </a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li class="item"><a href="user-profile.html"><i class="fa fa-user"></i>Profile</a></li>
-                                                    <li class="item"><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
-                                                    <li class="item"><a href="#"><i class="fa fa-envelope-o"></i>Messages</a></li>
-                                                    <li class="item"><a href="#"><i class="fa fa-power-off"></i>Logout</a></li>
+                                                    <li class="item"><a href="{{path('app_user_account')}}"><i class="fa fa-user"></i>Profile</a></li>
+                                                    <li class="item"><a href="{{path('app_user_logout')}}"><i class="fa fa-power-off"></i>Déconnexion</a></li>
                                                 </ul>
                                             </span>
                                         </div>
@@ -160,16 +147,12 @@
                                                 <li class="nav-header nav-header-first d-none d-lg-block">
                                                     Navigation
                                                 </li>
-                                                {% for role in app.user.roles %}
-                                                {% if role == 'ROLE_ADMIN' %}
                                                 <li class="active">
                                                     <a href="{{path('app_admin')}}">
                                                         <i class="fa fa-dashboard"></i>
-                                                        <span>Dashboard</span>
+                                                        <span>Tableau de Bord</span>
                                                     </a>
                                                 </li>
-                                                {% endif %}
-                                                {% endfor %}
                                                 <li>
                                                     <a href="#" class="dropdown-toggle dropdown-nocaret">
                                                         <i class="fa fa-snowboarding"></i>
@@ -179,137 +162,56 @@
                                                     <ul class="submenu">
                                                         <li>
                                                             <a href="{{path('app_trick_new')}}">
-                                                                New Trick
+                                                               Ajouter
                                                                 <span class="badge badge-success float-right">New</span>
                                                             </a>
                                                         </li>
                                                         {% for role in app.user.roles %}
-                                                            {% if role == 'ROLE_ADMIN' %}
-                                                        <li>
-                                                            <a href="{{path('app_trick_index')}}">
-                                                                Tricks Lists
-                                                                <span class="badge badge-success float-right">Lists</span>
-                                                            </a>
-                                                        </li>
-                                                          {% endif %}
                                                         {% endfor %}
                                                         <li>
                                                             <a href="{{path('app_tricks_lists')}}">
-                                                                My Tricks 
+                                                                Mes Tricks 
                                                                 <span class="badge badge-success float-right">Lists</span>
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                </li>
-                                                {% for role in app.user.roles %}
-                                                {% if role == 'ROLE_ADMIN' %}
+                                                </li>   
                                                 <li>
                                                     <a href="#" class="dropdown-toggle dropdown-nocaret">
                                                         <i class="fa fa-tag"></i>
-                                                        <span>Categorys</span>
+                                                        <span>Categories</span>
                                                         <i class="fa fa-angle-right drop-icon"></i>
                                                     </a>
                                                     <ul class="submenu">
                                                         <li>
                                                             <a href="{{path('app_categorie_add')}}">
-                                                                New Categorie
+                                                                Ajouter
                                                                 <span class="badge badge-success float-right">New</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <a href="{{path('app_categories')}}">
-                                                                Categories Lists
+                                                                Liste
                                                                 <span class="badge badge-success float-right">Lists</span>
                                                             </a>
                                                         </li>
                                                     </ul>
                                                 </li>
-                                                {% endif %}
-                                                {% endfor %}
                                                 <li>
                                                     <a href="#" class="dropdown-toggle dropdown-nocaret">
                                                         <i class="fa fa-envelope"></i>
-                                                        <span>Comments</span>
+                                                        <span>Commentaires</span>
                                                         <i class="fa fa-angle-right drop-icon"></i>
                                                     </a>
                                                     <ul class="submenu">
-                                                        <li>
-                                                            <a href="{{path('app_comment_new')}}">
-                                                                New Comment
-                                                                <span class="badge badge-success float-right">New</span>
-                                                            </a>
-                                                        </li>
-                                                        {% for role in app.user.roles %}
-                                                        {% if role == 'ROLE_ADMIN' %}
-                                                        <li>
-                                                            <a href="{{path('app_comment_index')}}">
-                                                                Comments Lists
-                                                                <span class="badge badge-success float-right">Lists</span>
-                                                            </a>
-                                                        </li>
-                                                        {% endif%}
-                                                        {%endfor%}
                                                         <li>
                                                             <a href="{{path('app_comment_lists')}}">
-                                                                My Comments
+                                                                Liste
                                                                 <span class="badge badge-success float-right">Lists</span>
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="dropdown-toggle dropdown-nocaret">
-                                                        <i class="fa fa-users"></i>
-                                                        <span>Users</span>
-                                                        <i class="fa fa-angle-right drop-icon"></i>
-                                                    </a>
-                                                    <ul class="submenu">
-                                                        {% for role in app.user.roles %}
-                                                            {% if role == 'ROLE_ADMIN' %}
-                                                            <li>
-                                                                <a href="{{path('app_users')}}">
-                                                                    Users Lists
-                                                                    <span class="badge badge-success float-right">Lists</span>
-                                                                </a>
-                                                            </li> 
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                        <li>
-                                                            <a href="{{path('app_user_change_password')}}">
-                                                                Password
-                                                                <span class="badge badge-success float-right">Change</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="{{path('app_video_index')}}" class="dropdown-toggle dropdown-nocaret">
-                                                        <i class="fas fa-image"></i>
-                                                        <span>Images</span>
-                                                    </a>
-                                                    <ul class="submenu">
-                                                        <li>
-                                                            <a href="{{path('app_image_index')}}">
-                                                                Images Lists
-                                                                <span class="badge badge-success float-right">Lists</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a href="{{path('app_video_index')}}" class="dropdown-toggle dropdown-nocaret">
-                                                        <i class="fas fa-video"></i>
-                                                        <span>Videos</span>
-                                                    </a>
-                                                    <ul class="submenu">
-                                                        <li>
-                                                            <a href="{{path('app_video_index')}}">
-                                                                Video Lists
-                                                                <span class="badge badge-success float-right">Lists</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
+                                                </li>  
                                             </ul>
                                         </div>
                                     </div>
@@ -322,13 +224,6 @@
                                 <div class="col-lg-12">
                     {% block admin %} {% endblock %}
         
-                                    <footer id="footer-bar" class="row">
-                                        <div class="container">
-                                            <p id="footer-copyright" class="col-12">
-                                                Powered by Cube Theme.
-                                            </p>
-                                        </div>
-                                    </footer>
                                 </div>
                             </div>
                         </div>

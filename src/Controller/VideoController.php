@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/video")
@@ -23,27 +24,20 @@ class VideoController extends AbstractController
     public function index(Request $request, PaginatorInterface $paginator, VideoRepository $videoRepository): Response
     {
         $user = $this->getUser();
-        if (in_array("ROLE_ADMIN", $user->getRoles())) {
-            $videos = $videoRepository->findAll();
+        if (!$user) {
+            throw new NotFoundHttpException('user innéxistant');
+        }
+        $tricks = $user->getTricks();
+        foreach ($tricks as $trick) {
+            $videos = $videoRepository->findBy([
+                'trick' => $trick
+            ]);
             $paginations = $paginator->paginate(
                 $videos, /* query NOT result */
                 $request->query->getInt('page', 1), /* page number */
                 10 /* limit per page */
             );
-        } else {
-            foreach ($user->getTricks() as $trick) {
-                $videos = $videoRepository->findBy([
-                    'trick' => $trick
-                ]);
-                $paginations = $paginator->paginate(
-                    $videos, /* query NOT result */
-                    $request->query->getInt('page', 1), /* page number */
-                    10 /* limit per page */
-                );
-            }
         }
-
-
         return $this->render('video/index.html.twig', [
             'paginations' => $paginations
         ]);
@@ -59,15 +53,17 @@ class VideoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $trick = $form->get('trick')->getData();
+            $video->setTrick($trick);
             $videoRepository->add($video, true);
-
+            $this->addFlash('success', 'video ajouté avec succès');
             return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('video/new.html.twig', [
             'video' => $video,
             'form' => $form,
-            'action' => 'Add video'
+            'action' => 'Ajouter une video'
         ]);
     }
 
@@ -90,15 +86,17 @@ class VideoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $trick = $form->get('trick')->getData();
+            $video->setTrick($trick);
             $videoRepository->add($video, true);
-
+            $this->addFlash('success', 'Video modifié avec succès');
             return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('video/edit.html.twig', [
             'video' => $video,
             'form' => $form,
-            'action' => 'Edit Video'
+            'action' => 'Editer une Video'
         ]);
     }
 
@@ -109,6 +107,7 @@ class VideoController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete' . $video->getId(), $request->request->get('_token'))) {
             $videoRepository->remove($video, true);
+            $this->addFlash('success', 'video supprimé avec succès');
         }
 
         return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);

@@ -33,7 +33,7 @@ class Categorie
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="categorie")
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="categorie",cascade={"persist", "remove"})
      */
     private $tricks;
 

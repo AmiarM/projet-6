@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
-
+{% block title %}
+Commentaires du Trick-{{trick.slug}}
+{% endblock %}
 {% block admin %}
 {% if trick.comments | length == 0 %}
 <div class="row d-flex justify-content-center mt-100 mb-100">
@@ -24,20 +26,12 @@
                   <div class="p-2"><img src="{{comment.user.avatar}}" alt="user" width="50" class="rounded-circle"></div>
                   <div class="comment-text w-100 mb-3">
                       <h6 class="font-medium" style="font-weight:bold;">{{comment.user.firstname|upper}} {{comment.user.lastname|upper}}</h6> 
-                      <p>
-                        {% if comment.activated == 0 %} 
-                        <span class="badge badge-danger" style="float:left;">Inactive</span> 
-                        {% else %}
-                        <span class="badge badge-success" style="float:left;">Active</span>
-                        {% endif %}
-                      </p>
                       <br>
                       <hr>
                       <span class="m-b-15 d-block">{{comment.content}}. </span>
-                      <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">published at: {{comment.createdAt|date('d/m/y à H:i:s')}}
+                      <div class="comment-footer pr-2" style="font-weight:bold;"> <span class="text-muted float-right">publié le: {{comment.createdAt|date('d/m/y à H:i:s')}}
                       </span>  
-                      <a type="button" href="{{path('app_comment_activated',{'id':comment.id})}}" class="btn btn-success btn-sm">Publish</a>
-                       <a type="button" href="{{path('app_comment_delete',{'id':comment.id})}}" class="btn btn-danger btn-sm">Delete</a> </div>
+                      {{ include('comment/_delete_form.html.twig') }}
                   </div>
               </div> <!-- Comment Row -->
           </div> <!-- Card -->

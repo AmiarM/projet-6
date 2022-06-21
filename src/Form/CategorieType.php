@@ -18,7 +18,7 @@ class CategorieType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Catégorie',
                 'attr' => [
-                    'placeholder' => 'Name of Categorie',
+                    'placeholder' => 'Nom de la  Catégorie',
                     'class' => 'form-control'
                 ]
             ])

@@ -27,7 +27,7 @@ class RegisterController extends AbstractController
 {
 
     /**
-     * @Route("/register", name="app_user_register")
+     * @Route("/", name="app_user_register")
      */
     public function index(Mailer $mailer, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -44,17 +44,19 @@ class RegisterController extends AbstractController
                 $user->setPassword($userPasswordHasher->hashPassword($user, $password));
                 //on récupére les images transmises
                 $image = $form->get('avatar')->getData();
-                //on genere le nouveau nom du fichier
-                $fichier = md5(uniqid()) . "." . $image->guessExtension();
-                //on copie le fichier dans le dossier upload
-                $image->move(
-                    $this->getParameter('images_directory'),
-                    $fichier
-                );
-                //on stock l'image dans la base de données 
-                $image = new Image();
-                $image->setName($fichier);
-                $user->setAvatar($fichier);
+                if ($image) {
+                    //on genere le nouveau nom du fichier
+                    $fichier = md5(uniqid()) . "." . $image->guessExtension();
+                    //on copie le fichier dans le dossier upload
+                    $image->move(
+                        $this->getParameter('images_directory'),
+                        $fichier
+                    );
+                    //on stock l'image dans la base de données 
+                    $image = new Image();
+                    $image->setName($fichier);
+                    $user->setAvatar('/uploads/' . $fichier);
+                }
                 $em->persist($user);
                 $em->flush();
                 $this->addFlash('success', 'User Created!');
@@ -82,14 +84,14 @@ class RegisterController extends AbstractController
 
 
     /**
-     * @Route("/register/confirm/{token}", name="user_register_confirm")
+     * @Route("/confirm/{token}", name="user_register_confirm")
      */
     public function confirm($token, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
         //on verifie si un utilisateur à ce token
         $user = $userRepository->findOneBy(['token' => $token]);
         if (!$user) {
-            throw new NotFoundHttpException('User Innéxistant');
+            throw new NotFoundHttpException('Utilisateur Innéxistant');
         }
         //on supprime le token 
         $user->setToken('NULL');
@@ -97,7 +99,7 @@ class RegisterController extends AbstractController
         $em->persist($user);
         $em->flush();
         //on envoie un message flash
-        $this->addFlash('success', 'user actiavated');
+        $this->addFlash('success', 'utilisateur activé');
         return $this->redirectToRoute('app_user_login');
     }
 }

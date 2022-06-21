@@ -1,36 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion!{% endblock %}
+{% block stylesheet %}
+<style>
+    .alert-success {
+        margin-top: 100px;
+      }
+      .alert-danger{
+        margin-top: 100px; 
+        text-aligne:center;
+      }
+</style>
+{% endblock %}
 {% block body %}
-<div class="mb-5"></div>
+<div style="margin-top:50px;"></div>
 {% for message in app.flashes('success') %}
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-12 text-center mt-5">
                 <div class="alert alert-success">
                     {{ message }}
                 </div>
             </div>
         {% endfor %}
-        {% for message in app.flashes('error') %}
-        <div class="col-lg-12 text-center">
-            <div class="alert alert-success">
+        {% for message in app.flashes('danger') %}
+        <div class="col-lg-12 text-center mt-5">
+            <div class="alert alert-danger">
                 {{ message }}
             </div>
         </div>
         {% endfor %}
-    <form method="post">
+    <form method="post" class="mb-5">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
         {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_user_logout') }}">Logout</a>
+        <div style="margin-top:400px;">
+            Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_user_logout') }}">Déconnexion</a>
         </div>
         {% else %}
         <section class="sign-in" style="margin-top:150px">
             <div class="container">
                 <div class="signin-content">
                     <div class="signin-form" style="margin:0 auto;">
-                        <h2 class="form-title">Login</h2>
+                        <h2 class="form-title">Connexion</h2>
                             <div class="form-group">
                                 <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                             </div>
@@ -39,13 +50,13 @@
                             </div>
                             <div class="form-group">
                                 <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label> 
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Se souvenir de moi</label> 
                                 <a href="{{path('app_user_register')}}" class="signup-image-link text-primary" style="float:right;">Créer un Compte!</a>
                             </div>
                             <button class="btn btn-lg btn-primary" type="submit">
-                                Sign in
+                               Connexion
                             </button>
-                            <a href="{{path('app_user_forgotten_password')}}" class="signup-image-link text-primary" style="float:right;">Forgot password?</a>
+                            <a href="{{path('app_user_forgotten_password')}}" class="signup-image-link text-primary" style="float:right;">Mot de passe oublié?</a>
                      </div>
                 </div>
             </div>
@@ -53,16 +64,5 @@
     {% endif %}
     
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
 </form>
 {% endblock %}

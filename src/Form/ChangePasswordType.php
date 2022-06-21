@@ -44,33 +44,33 @@ class ChangePasswordType extends AbstractType
                 'label' => false,
                 'mapped' => false,
                 'attr' => [
-                    'placeholder' => 'Your Actual Password',
+                    'placeholder' => 'Votre mot de passe actuel',
                     'class' => 'form-control'
                 ]
             ])
             ->add('new_password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
                 'first_options' => [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'Your New Password',
+                        'placeholder' => 'Votre nouveau mot de passe',
                         'class' => 'form-control mb-2'
                     ]
                 ],
                 'second_options' => [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'Confirm  Your New Password',
+                        'placeholder' => 'Confirmez votre nouveau mot de passe',
                         'class' => 'form-control mt-2'
                     ]
                 ],
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Change Password',
+                'label' => 'Changer le mot de passe',
                 'attr' => [
                     'class' => 'btn btn-success'
                 ]
