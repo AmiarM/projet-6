@@ -5,7 +5,7 @@ https://getcomposer.org/download/
 # installer Git
 https://gitforwindows.org/
 # cloner le projet
-  - **```git clone  https://github.com/AmiarM/projet-6.git``` ou  
+  - git clone  https://github.com/AmiarM/projet-6.git  ou  
   - télécharger l'archive
 # installer les différentes dépendances du projet
 ```
