@@ -5,7 +5,7 @@ https://getcomposer.org/download/
 # installer Git
 https://getcomposer.org/download/
 # installer la CLI de symfony
-symfony.com
+```https://symfony.com/download```
 # cloner le projet
   - git clone  https://github.com/AmiarM/projet-6.git  ou  
   - télécharger l'archive
