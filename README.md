@@ -3,7 +3,9 @@ Snow Trick est un site collaboratif à destination des passionnés du snowboard.
 # installer le rgestionnaire de dépendances Composer
 https://getcomposer.org/download/
 # installer Git
-https://gitforwindows.org/
+https://getcomposer.org/download/
+# installer la CLI de symfony
+symfony.com
 # cloner le projet
   - git clone  https://github.com/AmiarM/projet-6.git  ou  
   - télécharger l'archive
