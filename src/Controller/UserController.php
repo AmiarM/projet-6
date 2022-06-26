@@ -64,7 +64,7 @@ class UserController extends AbstractController
             $user->setToken(md5(uniqid(10)));
             $this->manager->persist($user);
             $this->manager->flush();
-            $this->addFlash('success', 'User edited successfully');
+            $this->addFlash('success', 'User edité avec succès');
             return $this->redirectToRoute('app_users');
         }
         return $this->render('user/add.html.twig', [
@@ -85,7 +85,7 @@ class UserController extends AbstractController
         }
         $this->manager->remove($user);
         $this->manager->flush();
-        $this->addFlash('success', 'User deleted successfully');
+        $this->addFlash('success', 'User supprimé avec succès');
         return $this->redirectToRoute("app_users");
     }
 
@@ -113,10 +113,10 @@ class UserController extends AbstractController
             throw new NotFoundHttpException("User innexistant");
         }
         if ($user->getActivated() == 1) {
-            $this->addFlash('error', 'User already Activated!');
+            $this->addFlash('error', 'User déja activé!');
         } else {
             $user->setActivated(1);
-            $this->addFlash('success', 'user successfully activated!');
+            $this->addFlash('success', 'user activaté avec succès!');
         }
         $this->manager->flush();
         return $this->redirectToRoute('app_users');

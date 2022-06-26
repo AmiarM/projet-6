@@ -33,7 +33,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted()) {
             $comment->setUser($user);
             $commentRepository->add($comment);
-            $this->addFlash('success', 'comment successfully added!');
+            $this->addFlash('success', 'commentaire ajouté avec  succès!');
             return $this->redirectToRoute('app_comment_lists', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -80,7 +80,7 @@ class CommentController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
             $commentRepository->remove($comment);
-            $this->addFlash('error', 'comment  deleted successfully');
+            $this->addFlash('error', 'commentaire  supprimé avec  succès');
         }
 
         return $this->redirectToRoute('app_comment_lists', [], Response::HTTP_SEE_OTHER);

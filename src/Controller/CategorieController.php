@@ -66,7 +66,7 @@ class CategorieController extends AbstractController
             $category = $form->getData();
             $this->manager->persist($category);
             $this->manager->flush();
-            $this->addFlash('success', 'Categorie added successfully');
+            $this->addFlash('success', 'Categorie ajouté avec succès');
             return $this->redirectToRoute('app_categories');
         }
         return $this->render('categorie/create.html.twig', [
@@ -90,7 +90,7 @@ class CategorieController extends AbstractController
             $categorie = $form->getData();
             $this->manager->persist($categorie);
             $this->manager->flush();
-            $this->addFlash('success', 'Categorie edited successfully');
+            $this->addFlash('success', 'Categorie edité avec succès');
             return $this->redirectToRoute('app_categories');
         }
         return $this->render('categorie/edit.html.twig', [
@@ -111,7 +111,7 @@ class CategorieController extends AbstractController
         }
         $this->manager->remove($category);
         $this->manager->flush();
-        $this->addFlash('success', 'Categorie deleted successfully');
+        $this->addFlash('success', 'Categorie supprimé avec succès');
         return $this->redirectToRoute("app_categories");
     }
 }

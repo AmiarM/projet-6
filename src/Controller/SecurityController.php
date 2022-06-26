@@ -47,7 +47,8 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException('
+        Cette méthode peut être vide - elle sera interceptée par la clé de déconnexion de votre pare-feu.');
     }
 
     /**
@@ -70,7 +71,7 @@ class SecurityController extends AbstractController
             //si l'utilisateur n'existe pas
             if (!$user) {
                 //onenvoie un message
-                $this->addFlash('danger', 'user not found');
+                $this->addFlash('danger', 'utilisateur innéxistant');
                 return $this->redirectToRoute('app_user_login');
             }
             //on genere un token
@@ -81,7 +82,7 @@ class SecurityController extends AbstractController
                 $em->persist($user);
                 $em->flush();
             } catch (\Exception $e) {
-                $this->addFlash('warning', 'a mistake has occurred' . $e->getMessage());
+                $this->addFlash('warning', 'une erreur s\'est produite' . $e->getMessage());
                 return $this->redirectToRoute("user_login");
             }
             //on gènere l'url de réinitialisation du mdp

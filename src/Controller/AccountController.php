@@ -55,7 +55,7 @@ class AccountController extends AbstractController
 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
-                $this->addFlash('success', 'password changed seccessfully!!');
+                $this->addFlash('success', 'Moe de passe changé avec succès');
             }
         }
         return $this->render('account/password.html.twig', [

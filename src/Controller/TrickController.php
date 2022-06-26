@@ -88,7 +88,7 @@ class TrickController extends AbstractController
             $trick->setUser($user);
             $this->manager->persist($trick);
             $this->manager->flush();
-            $this->addFlash('success', 'Trick successfully added!');
+            $this->addFlash('success', 'Trick ajouté avec succès!');
             return $this->redirectToRoute('app_tricks_lists');
         }
 
@@ -105,7 +105,7 @@ class TrickController extends AbstractController
     public function show(Trick $trick, PaginatorInterface $paginator, TrickRepository $trickRepository, Request $request): Response
     {
         if (!$trick) {
-            throw new NotFoundHttpException('Trick  not  found');
+            throw new NotFoundHttpException('Trick  n\'existe pas');
         }
         $comments = $trick->getComments();
         $paginations = $paginator->paginate(
@@ -154,7 +154,7 @@ class TrickController extends AbstractController
             }
             $trick->setUser($user);
             $trickRepository->add($trick);
-            $this->addFlash('success', 'Trick edited Successfuly');
+            $this->addFlash('success', 'Trick edité avec succès');
             return $this->redirectToRoute('app_tricks_lists');
         }
 
@@ -183,7 +183,7 @@ class TrickController extends AbstractController
             // On supprime l'entrée de la base
             $this->manager->remove($image);
             $this->manager->flush();
-            $this->addFlash('success', 'trick deleted successfuly');
+            $this->addFlash('success', 'trick supprimé avec succès');
             // On répond en json
             return new JsonResponse(['success' => 1]);
         } else {
@@ -238,7 +238,7 @@ class TrickController extends AbstractController
         }
         if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
             $trickRepository->remove($trick);
-            $this->addFlash('success', 'Trick deleted successfuly');
+            $this->addFlash('success', 'Trick supprimé avec succés');
         }
         return $this->redirectToRoute('app_tricks_lists', [], Response::HTTP_SEE_OTHER);
     }
@@ -249,7 +249,7 @@ class TrickController extends AbstractController
     public function promote(Image $image, EntityManagerInterface $em)
     {
         if (!$image) {
-            throw new NotFoundHttpException('Image Not Foud');
+            throw new NotFoundHttpException('Image n\'existe pas');
         }
         if ($image->getIsFirst() == 1) {
             $image->setIsFirst(0);
@@ -258,7 +258,7 @@ class TrickController extends AbstractController
         }
 
         $em->flush();
-        $this->addFlash('success', 'status changed successfully');
+        $this->addFlash('success', 'status changé avec succès');
         return $this->redirectToRoute('app_image_show', [
             'id' => $image->getId()
         ]);
