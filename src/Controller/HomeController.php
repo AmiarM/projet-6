@@ -65,7 +65,7 @@ class HomeController extends AbstractController
             $this->manager->persist($comment);
             $this->manager->flush();
 
-            $this->addFlash('message', 'your comment is posted!');
+            $this->addFlash('message', 'votre commentaire est posté!');
             return $this->redirectToRoute(
                 'app_home_show',
                 [

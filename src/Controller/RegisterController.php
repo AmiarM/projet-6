@@ -59,7 +59,7 @@ class RegisterController extends AbstractController
                 }
                 $em->persist($user);
                 $em->flush();
-                $this->addFlash('success', 'User Created!');
+                $this->addFlash('success', 'Utilisateur ajouté avec succès! un email vous est été envoyé pour activer votre compte');
                 //dd($user->getEmail());
                 //envoi de mail
                 $mailer->sendMail(

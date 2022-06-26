@@ -28,7 +28,7 @@
                             {{ form_widget(form.images) }}
 
                             <!--   Add video   -->
-                            <div style="background-color: red; padding: 10px;">
+                            <div style="padding: 10px;">
                                 <div class="form-group">
                                     <div id="videos" class="videos" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
                                         {% for video in form.videos%}
